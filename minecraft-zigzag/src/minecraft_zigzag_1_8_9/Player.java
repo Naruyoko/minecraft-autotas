@@ -78,6 +78,8 @@ public class Player {
    * @param movementInputMoveForward +1.0F if inputting move forward, -1.0F if inputting move backward
    */
   public void step(final float movementInputMoveStrafe,final float movementInputMoveForward) {
+    if (Math.abs(this.velX)<0.005D) this.velX=0.0D;
+    if (Math.abs(this.velZ)<0.005D) this.velZ=0.0D;
     // Call to {net.minecraft.entity.player.EntityPlayer.jump()} if jumping, omitted
     final float moveStrafing=movementInputMoveStrafe*0.98F;
     final float moveForward=movementInputMoveForward*0.98F;
@@ -113,6 +115,15 @@ public class Player {
         player.moveCamera(i);
         player.step(j,1F);
         System.out.println(String.format("%4d %2d %-22s %-22s %-22s %-22s",i,(int)j,Utility.padSignDouble(player.posX),Utility.padSignDouble(player.posZ),Utility.padSignDouble(player.velX),Utility.padSignDouble(player.velZ)));
+      }
+    }
+    for (float j:new float[]{0F,1F}){
+      System.out.println();
+      Player player=new Player(0,0,0,0,0);
+      player.moveCamera((int)j*300);
+      for (int t=0;t<10;t++){
+        player.step(j,1F);
+        System.out.println(String.format("%2d %2d %-22s %-22s %-22s %-22s",(int)j,t+1,Utility.padSignDouble(player.posX),Utility.padSignDouble(player.posZ),Utility.padSignDouble(player.velX),Utility.padSignDouble(player.velZ)));
       }
     }
   }

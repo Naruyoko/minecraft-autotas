@@ -16,12 +16,14 @@ public class BeamSearch {
   static final int maximumMovementPerFrame=900;
   final int solutionLength;
   final int beamWidth;
+  final int angleStep;
   final IJudge judge;
   PriorityQueue<Individual> finalBeam;
   Individual bestIndividual;
-  public BeamSearch(int solutionLength,int beamWidth,IJudge judge){
+  public BeamSearch(int solutionLength,int beamWidth,int angleStep,IJudge judge){
     this.solutionLength=solutionLength;
     this.beamWidth=beamWidth;
+    this.angleStep=angleStep;
     this.judge=judge;
   }
   public int getSolutionLength(){
@@ -29,6 +31,9 @@ public class BeamSearch {
   }
   public int getBeamWidth(){
     return this.beamWidth;
+  }
+  public int getAngleStep(){
+    return this.angleStep;
   }
   public IJudge getJudge(){
     return this.judge;
@@ -78,7 +83,7 @@ public class BeamSearch {
       Iterator<Individual> iterator=lastBeam.iterator();
       while (iterator.hasNext()){
         Individual individual=iterator.next();
-        for (int x=Math.max(-maximumMovementPerTick,(int)((-135F-(individual.player.yaw+45F))/(Player.mouseMult*0.15D)));x<=maximumMovementPerTick;x+=300){
+        for (int x=Math.max(-maximumMovementPerTick,(int)((-135F-(individual.player.yaw+45F))/(Player.mouseMult*0.15D)));x<=maximumMovementPerTick;x+=angleStep){
           Player.copy(workingPlayer,individual.player);
           moveCameraWithDivision(workingPlayer,x);
           if (workingPlayer.yaw+45F>135F) break;
@@ -108,7 +113,10 @@ public class BeamSearch {
   }
   public static void main(String[] args) {
     Date date=new Date();
-    BeamSearch searcher=new BeamSearch(100, 1000000, new SmallZigzagJudge());
+    if (false){
+      BeamSearch searcher=new BeamSearch(100, 1000000, 100, new SmallZigzagJudge());
+    }
+    BeamSearch searcher=new BeamSearch(100, 1000000, 100, new SmallZigzagJudge2());
     Individual result=searcher.search(true);
     try {
       DateFormat dateFormat=new SimpleDateFormat("yyyyMMddHHmmssSSS");
