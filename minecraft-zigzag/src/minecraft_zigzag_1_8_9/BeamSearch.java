@@ -90,7 +90,7 @@ public class BeamSearch {
           stepPlayer(workingPlayer);
           double score=judge.score(workingPlayer);
           if (score<=bestLosingScore) continue;
-          if (!judge.isValid(workingPlayer)) continue;
+          if (!judge.isValid(individual.player,workingPlayer)) continue;
           Individual newIndividual=new Individual(individual.mouseMovements.clone(),workingPlayer.clone(),score);
           newIndividual.mouseMovements[t]=x;
           beam.add(newIndividual);

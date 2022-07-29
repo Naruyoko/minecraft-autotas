@@ -34,8 +34,8 @@ public class SmallZigzagJudge implements IJudge {
     }
     return false;
   }
-  public boolean isValid(Player player){
-    return onGround(player);
+  public boolean isValid(Player lastPlayer,Player currentPlayer){
+    return onGround(lastPlayer)||onGround(currentPlayer);
   }
   public double score(Player player) {
     return player.posZ-startingState.posZ;
