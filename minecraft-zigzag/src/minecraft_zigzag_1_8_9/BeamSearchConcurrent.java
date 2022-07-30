@@ -5,9 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +24,7 @@ public class BeamSearchConcurrent {
   private final int beamWidth;
   private final int angleStep;
   private final IJudge judge;
+  private final Comparator<Individual> comparator;
   private final ArrayBlockingQueue<Individual> lastBeam;
   private final PriorityQueue<Individual> beam;
   private final CalculationService calculationService;
@@ -33,7 +37,7 @@ public class BeamSearchConcurrent {
     this.beamWidth=beamWidth;
     this.angleStep=angleStep;
     this.judge=judge;
-    Comparator<Individual> comparator=new Comparator<Individual>(){
+    comparator=new Comparator<Individual>(){
       public int compare(Individual o1, Individual o2) {
         return Double.compare(o1.scoreCache,o2.scoreCache);
       }
@@ -53,6 +57,9 @@ public class BeamSearchConcurrent {
   }
   public IJudge getJudge(){
     return this.judge;
+  }
+  public Comparator<Individual> getComparator() {
+    return this.comparator;
   }
   public ArrayBlockingQueue<Individual> getLastBeam(){
     return this.lastBeam;
@@ -127,15 +134,28 @@ public class BeamSearchConcurrent {
     private final int t;
     private final Player workingPlayer;
     private double bestLosingScoreCopy;
+    private final int BULKOFFERSIZE=1000;
     public Handler(BeamSearchConcurrent searcher,int t){
       this.searcher=searcher;
       this.t=t;
       this.workingPlayer=new Player();
       this.bestLosingScoreCopy=Double.NEGATIVE_INFINITY;
     }
+    public void offerBulk(List<Individual> offeringIndividuals){
+      offeringIndividuals.sort(searcher.getComparator().reversed());
+      Iterator<Individual> iterator=offeringIndividuals.iterator();
+      while (iterator.hasNext()){
+        Individual newIndividual=iterator.next();
+        if (newIndividual.scoreCache<=bestLosingScoreCopy) break;
+        double newBestLosingScore=offerBeam(newIndividual);
+        if (newBestLosingScore>bestLosingScoreCopy) bestLosingScoreCopy=newBestLosingScore;
+      }
+      offeringIndividuals.clear();
+    }
     public void run() {
       IJudge judge=searcher.getJudge();
       ArrayBlockingQueue<Individual> lastBeam=searcher.getLastBeam();
+      List<Individual> offeringIndividuals=new ArrayList<Individual>(BULKOFFERSIZE);
       while (true){
         Individual individual=lastBeam.poll();
         if (individual==null) break;
@@ -149,10 +169,11 @@ public class BeamSearchConcurrent {
           if (!judge.isValid(individual.player,workingPlayer)) continue;
           Individual newIndividual=new Individual(individual.mouseMovements.clone(),workingPlayer.clone(),score);
           newIndividual.mouseMovements[t]=x;
-          double newBestLosingScore=offerBeam(newIndividual);
-          if (newBestLosingScore>bestLosingScoreCopy) bestLosingScoreCopy=newBestLosingScore;
+          offeringIndividuals.add(newIndividual);
+          if (offeringIndividuals.size()>=BULKOFFERSIZE) offerBulk(offeringIndividuals);
         }
       }
+      offerBulk(offeringIndividuals);
     }
   }
   public Individual searchNextLevel(int t,boolean consoleOut) throws InterruptedException{
