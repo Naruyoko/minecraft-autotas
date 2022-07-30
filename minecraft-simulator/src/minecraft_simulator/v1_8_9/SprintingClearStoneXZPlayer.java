@@ -1,15 +1,23 @@
-package minecraft_zigzag_1_8_9;
-public class Player {
-  // See {net.minecraft.entity.player.EntityPlayer.preparePlayerToSpawn()}
-  static final float width=0.6F;
+package minecraft_simulator.v1_8_9;
 
-  public AxisAlignedBB boundingBox; // {net.minecraft.entity.Entity.boundingBox}
+/**
+ * Simulates the player movement assuming with following restrictions:
+ * - Always sprinting
+ * - No crouching
+ * - No block interactions
+ * - Assumed to be on ground with normal slipperiness
+ * - No falling (XZ-only)
+ */
+public class SprintingClearStoneXZPlayer {
+  // See {net.minecraft.entity.player.EntityPlayer.preparePlayerToSpawn()}
+  public final float width=0.6F;
+  public MutableXZAxisAlignedBB boundingBox; // {net.minecraft.entity.Entity.boundingBox}
   public double posX; // {net.minecraft.entity.Entity.posX}
   public double posZ; // {net.minecraft.entity.Entity.posZ}
   public double velX; // {net.minecraft.entity.Entity.motionX}
   public double velZ; // {net.minecraft.entity.Entity.motionZ}
   public float yaw; // {net.minecraft.entity.Entity.rotationYaw}
-  public Player(double posX,double posZ,AxisAlignedBB boundingBox,double velX,double velZ,float yaw) {
+  public SprintingClearStoneXZPlayer(double posX,double posZ,MutableXZAxisAlignedBB boundingBox,double velX,double velZ,float yaw) {
     this.posX=posX;
     this.posZ=posZ;
     this.boundingBox=boundingBox;
@@ -17,31 +25,31 @@ public class Player {
     this.velZ=velZ;
     this.yaw=yaw;
   }
-  public Player(double posX,double posZ,double velX,double velZ,float yaw) {
+  public SprintingClearStoneXZPlayer(double posX,double posZ,double velX,double velZ,float yaw) {
     this(posX,posZ,null,velX,velZ,yaw);
     // See {net.minecraft.entity.Entity.setPosition(double, double, double)}
     final float halfWidth=width/2.0F;
-    this.boundingBox=new AxisAlignedBB(posX-(double)halfWidth, posZ-(double)halfWidth, posX+(double)halfWidth, posZ+(double)halfWidth);
+    this.boundingBox=new MutableXZAxisAlignedBB(posX-(double)halfWidth, posZ-(double)halfWidth, posX+(double)halfWidth, posZ+(double)halfWidth);
   }
-  public Player() {
+  public SprintingClearStoneXZPlayer() {
     this(0,0,0,0,0);
   }
-  public Player clone() {
-    return new Player(posX, posZ, boundingBox.clone(), velX, velZ, yaw);
+  public SprintingClearStoneXZPlayer clone() {
+    return new SprintingClearStoneXZPlayer(posX, posZ, boundingBox.clone(), velX, velZ, yaw);
   }
-  public static void copy(Player target,Player source) {
+  public static void copy(SprintingClearStoneXZPlayer target,SprintingClearStoneXZPlayer source) {
     target.posX=source.posX;
     target.posZ=source.posZ;
-    AxisAlignedBB.copy(target.boundingBox,source.boundingBox);
+    MutableXZAxisAlignedBB.copy(target.boundingBox,source.boundingBox);
     target.velX=source.velX;
     target.velZ=source.velZ;
     target.yaw=source.yaw;
   }
 
   // See https://www.mcpk.wiki/wiki/Mouse_Movement and {net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(float, long)}
-  static final float mouseSensitivity=0.5F;
-  static final float mouseMult_intermediate=mouseSensitivity*0.6F+0.2F;
-  static final float mouseMult=mouseMult_intermediate*mouseMult_intermediate*mouseMult_intermediate*8.0F;
+  public static final float mouseSensitivity=0.5F;
+  public static final float mouseMult_intermediate=mouseSensitivity*0.6F+0.2F;
+  public static final float mouseMult=mouseMult_intermediate*mouseMult_intermediate*mouseMult_intermediate*8.0F;
   /**
    * Changes yaw as if the mouse was moved horizontally at default sensitivity
    * @param pixels
@@ -55,24 +63,24 @@ public class Player {
 
   // See https://www.mcpk.wiki/wiki/45_Strafe and {net.minecraft.entity.EntityLivingBase.onLivingUpdate()}
   // {net.minecraft.block.Block.slipperiness}
-  static final float slipperinessDefault=0.6F;
+  public static final float slipperinessDefault=0.6F;
   // {net.minecraft.block.BlockIce.slipperiness}
-  static final float slipperinessIce=0.98F;
+  public static final float slipperinessIce=0.98F;
   // {net.minecraft.block.BlockPackedIce.slipperiness}
-  static final float slipperinessPackedIce=0.98F;
+  public static final float slipperinessPackedIce=0.98F;
   // {net.minecraft.block.BlockSlime.slipperiness}
-  static final float slipperinessSlime=0.8F;
+  public static final float slipperinessSlime=0.8F;
   // {net.minecraft.entity.player.EntityPlayer.applyEntityAttributes()}
-  static final double baseMovementSpeed=0.10000000149011612D;
+  public static final double baseMovementSpeed=0.10000000149011612D;
   // {net.minecraft.entity.EntityLivingBase.setSprinting(boolean)} {net.minecraft.entity.EntityLivingBase.sprintingSpeedBoostModifier}
-  static final double sprintingSpeedBoostModifier=0.30000001192092896D;
+  public static final double sprintingSpeedBoostModifier=0.30000001192092896D;
   // Set in {net.minecraft.entity.player.EntityPlayer.onLivingUpdate()}
   // {net.minecraft.entity.ai.attributes.ModifiableAttributeInstance.computeValue()}
-  static final float movementSpeed=(float)(baseMovementSpeed*(1.0D+sprintingSpeedBoostModifier));
+  public static final float movementSpeed=(float)(baseMovementSpeed*(1.0D+sprintingSpeedBoostModifier));
   // {net.minecraft.entity.EntityLivingBase.moveEntityWithHeading(float, float)}
-  static final float blockFrictionFactor=slipperinessDefault*0.91F;
-  static final float friction_intermediate=0.16277136F/(blockFrictionFactor*blockFrictionFactor*blockFrictionFactor);
-  static final float friction=movementSpeed*friction_intermediate;
+  public static final float blockFrictionFactor=slipperinessDefault*0.91F;
+  public static final float friction_intermediate=0.16277136F/(blockFrictionFactor*blockFrictionFactor*blockFrictionFactor);
+  public static final float friction=movementSpeed*friction_intermediate;
   /**
    * Simulate 1 tick of movement on a normal flat surface given the yaw while springting
    * See {net.minecraft.entity.EntityLivingBase.onLivingUpdate()}
@@ -114,7 +122,7 @@ public class Player {
   public static void main(String[] args) {
     for (int i=-900;i<=900;i+=100){
       for (float j:new float[]{-1F,0F,1F}){
-        Player player=new Player(0,0,0,0,0);
+        SprintingClearStoneXZPlayer player=new SprintingClearStoneXZPlayer(0,0,0,0,0);
         player.moveCamera(i);
         player.step(j,1F);
         System.out.println(String.format("%4d %2d %-22s %-22s %-22s %-22s",i,(int)j,Utility.padSignDouble(player.posX),Utility.padSignDouble(player.posZ),Utility.padSignDouble(player.velX),Utility.padSignDouble(player.velZ)));
@@ -122,7 +130,7 @@ public class Player {
     }
     for (float j:new float[]{0F,1F}){
       System.out.println();
-      Player player=new Player(0,0,0,0,0);
+      SprintingClearStoneXZPlayer player=new SprintingClearStoneXZPlayer(0,0,0,0,0);
       player.moveCamera((int)j*300);
       for (int t=0;t<10;t++){
         player.step(j,1F);

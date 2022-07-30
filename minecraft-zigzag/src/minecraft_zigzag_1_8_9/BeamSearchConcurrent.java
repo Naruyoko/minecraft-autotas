@@ -14,6 +14,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import minecraft_simulator.v1_8_9.SprintingClearStoneXZPlayer;
+import minecraft_simulator.v1_8_9.Utility;
+
 public class BeamSearchConcurrent {
   public static final int maximumMovementPerTick=1500;
   public static final int maximumMovementPerFrame=900;
@@ -63,7 +66,7 @@ public class BeamSearchConcurrent {
   public double getBestScore(){
     return this.bestIndividual.scoreCache;
   }
-  public static void moveCameraWithDivision(Player player,int pixels){
+  public static void moveCameraWithDivision(SprintingClearStoneXZPlayer player,int pixels){
     if (pixels<-maximumMovementPerFrame){
       player.moveCamera(-maximumMovementPerFrame);
       player.moveCamera(pixels+maximumMovementPerFrame);
@@ -74,7 +77,7 @@ public class BeamSearchConcurrent {
       player.moveCamera(pixels);
     }
   }
-  public static void stepPlayer(Player player) {
+  public static void stepPlayer(SprintingClearStoneXZPlayer player) {
     player.step(-1.0F,1.0F);
   }
   public synchronized double offerBeam(Individual newIndividual){
@@ -93,7 +96,7 @@ public class BeamSearchConcurrent {
     return loserScore;
   }
   public void init(boolean consoleOut){
-    Player workingPlayer=judge.getStartingState();
+    SprintingClearStoneXZPlayer workingPlayer=judge.getStartingState();
     lastBeam.clear();
     beam.clear();
     beam.add(new Individual(new int[solutionLength],workingPlayer.clone(),judge.score(workingPlayer)));
@@ -125,12 +128,12 @@ public class BeamSearchConcurrent {
   class Handler implements Runnable{
     private final BeamSearchConcurrent searcher;
     private final int t;
-    private final Player workingPlayer;
+    private final SprintingClearStoneXZPlayer workingPlayer;
     private double bestLosingScoreCopy;
     public Handler(BeamSearchConcurrent searcher,int t){
       this.searcher=searcher;
       this.t=t;
-      this.workingPlayer=new Player();
+      this.workingPlayer=new SprintingClearStoneXZPlayer();
       this.bestLosingScoreCopy=Double.NEGATIVE_INFINITY;
     }
     public void run() {
@@ -139,8 +142,8 @@ public class BeamSearchConcurrent {
       while (true){
         Individual individual=lastBeam.poll();
         if (individual==null) break;
-        for (int x=Math.max(-maximumMovementPerTick,(int)((-135F-(individual.player.yaw+45F))/(Player.mouseMult*0.15D)));x<=maximumMovementPerTick;x+=angleStep){
-          Player.copy(workingPlayer,individual.player);
+        for (int x=Math.max(-maximumMovementPerTick,(int)((-135F-(individual.player.yaw+45F))/(SprintingClearStoneXZPlayer.mouseMult*0.15D)));x<=maximumMovementPerTick;x+=angleStep){
+          SprintingClearStoneXZPlayer.copy(workingPlayer,individual.player);
           moveCameraWithDivision(workingPlayer,x);
           if (workingPlayer.yaw+45F>135F) break;
           stepPlayer(workingPlayer);
@@ -193,7 +196,7 @@ public class BeamSearchConcurrent {
       writer1.write(Arrays.toString(result.mouseMovements));
       writer1.newLine();
       writer1.newLine();
-      Player player=searcher.judge.getStartingState();
+      SprintingClearStoneXZPlayer player=searcher.judge.getStartingState();
       writer2.write(
         "!property"+System.lineSeparator()+
         // String.format("startPosition=%f,%f,%f",player.posX,100.0,player.posZ)+System.lineSeparator()+
@@ -201,7 +204,7 @@ public class BeamSearchConcurrent {
         String.format("startMotion=%f,%f,%f",player.velX,0.0,player.velZ)+System.lineSeparator()+
         "startInvulnerabilityFrames=0"+System.lineSeparator()+
         "startGametype=NOT_SET"+System.lineSeparator()+
-        String.format("mouseSensitivity=%f",Player.mouseSensitivity)+System.lineSeparator()+
+        String.format("mouseSensitivity=%f",SprintingClearStoneXZPlayer.mouseSensitivity)+System.lineSeparator()+
         String.format("mouseMaxSafeMovement=%d",maximumMovementPerFrame)+System.lineSeparator()+
         String.format("tickLength=%d",searcher.getSolutionLength()+20)+System.lineSeparator()+
         "rerecords=0"+System.lineSeparator()+

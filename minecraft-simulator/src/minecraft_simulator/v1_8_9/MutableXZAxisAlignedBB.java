@@ -1,29 +1,23 @@
-package minecraft_zigzag_1_8_9;
+package minecraft_simulator.v1_8_9;
 
 /**
- * A mutable of {net.minecraft.util.AxisAlignedBB}
+ * A mutable and XZ-only version of {net.minecraft.util.AxisAlignedBB}
  */
-public class AxisAlignedBB {
+public class MutableXZAxisAlignedBB {
   public double minX;
   public double minZ;
   public double maxX;
   public double maxZ;
-  public AxisAlignedBB(double minX,double minZ,double maxX,double maxZ) {
+  public MutableXZAxisAlignedBB(double minX,double minZ,double maxX,double maxZ) {
     this.minX=minX;
     this.minZ=minZ;
     this.maxX=maxX;
     this.maxZ=maxZ;
   }
-  public AxisAlignedBB(int minX,int minZ,int maxX,int maxZ) {
-    this.minX=minX;
-    this.minZ=minZ;
-    this.maxX=maxX;
-    this.maxZ=maxZ;
+  public MutableXZAxisAlignedBB clone(){
+    return new MutableXZAxisAlignedBB(minX, minZ, maxX, maxZ);
   }
-  public AxisAlignedBB clone(){
-    return new AxisAlignedBB(minX, minZ, maxX, maxZ);
-  }
-  public static void copy(AxisAlignedBB target,AxisAlignedBB source){
+  public static void copy(MutableXZAxisAlignedBB target,MutableXZAxisAlignedBB source){
     target.minX=source.minX;
     target.minZ=source.minZ;
     target.maxX=source.maxX;
@@ -46,7 +40,7 @@ public class AxisAlignedBB {
    * @param other
    * @return
    */
-  public boolean intersectsHorizontally(AxisAlignedBB other){
+  public boolean intersectsHorizontally(MutableXZAxisAlignedBB other){
     return other.maxX>this.minX&&other.minX<this.maxX&&other.maxZ>this.minZ&&other.minZ<this.maxZ;
   }
 }

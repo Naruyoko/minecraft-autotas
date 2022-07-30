@@ -1,4 +1,4 @@
-package minecraft_zigzag_1_8_9;
+package minecraft_simulator.v1_8_9;
 
 public class Utility {
   public static String padSignFloat(float value){
@@ -13,11 +13,11 @@ public class Utility {
     else if (value>0) return '+'+r;
     else return r;
   }
-  static final double blockMinXZ=(double)0F;
-  static final double blockMaxXZ=(double)1F;
-  public static boolean intersectsBlock(Player player,int x,int z){
+  public static final double blockMinXZ=(double)0F;
+  public static final double blockMaxXZ=(double)1F;
+  public static boolean intersectsXZBlock(SprintingClearStoneXZPlayer player,int x,int z){
     // See {net.minecraft.block.Block.getCollisionBoundingBox(World, BlockPos, IBlockState)}
-    AxisAlignedBB blockbb=new AxisAlignedBB((double)x+blockMinXZ,(double)z+blockMinXZ,(double)x+blockMaxXZ,(double)z+blockMaxXZ);
+    MutableXZAxisAlignedBB blockbb=new MutableXZAxisAlignedBB((double)x+blockMinXZ,(double)z+blockMinXZ,(double)x+blockMaxXZ,(double)z+blockMaxXZ);
     return blockbb.intersectsHorizontally(player.boundingBox);
   }
 }

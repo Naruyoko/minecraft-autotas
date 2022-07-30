@@ -1,6 +1,8 @@
-package minecraft_zigzag_1_8_9;
+package minecraft_simulator.v1_8_9;
 
-// See {net.minecraft.util.MathHelper}
+/**
+ * See {net.minecraft.util.MathHelper}
+ */
 public class MathHelper {
   // Required for accurate physics simulation
   // See https://www.mcpk.wiki/wiki/Angles
