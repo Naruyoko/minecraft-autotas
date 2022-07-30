@@ -23,6 +23,9 @@ public class Player {
     final float halfWidth=width/2.0F;
     this.boundingBox=new AxisAlignedBB(posX-(double)halfWidth, posZ-(double)halfWidth, posX+(double)halfWidth, posZ+(double)halfWidth);
   }
+  public Player() {
+    this(0,0,0,0,0);
+  }
   public Player clone() {
     return new Player(posX, posZ, boundingBox.clone(), velX, velZ, yaw);
   }
