@@ -113,9 +113,7 @@ public class BeamSearch {
   }
   public static void main(String[] args) {
     Date date=new Date();
-    if (false){
-      BeamSearch searcher=new BeamSearch(100, 1000000, 100, new SmallZigzagJudge());
-    }
+    // BeamSearch searcher=new BeamSearch(100, 1000000, 100, new SmallZigzagJudge());
     BeamSearch searcher=new BeamSearch(100, 1000000, 100, new SmallZigzagJudge2());
     Individual result=searcher.search(true);
     try {
