@@ -77,10 +77,9 @@ public class BeamSearchConcurrent {
   public static void stepPlayer(Player player) {
     player.step(-1.0F,1.0F);
   }
-  public synchronized double offerBeam(Individual oldIndividual,int t,int x,Player workingPlayer,double score){
-    if (score<=bestLosingScore) return score;
-    Individual newIndividual=new Individual(oldIndividual.mouseMovements.clone(),workingPlayer.clone(),score);
-    newIndividual.mouseMovements[t]=x;
+  public synchronized double offerBeam(Individual newIndividual){
+    final double score=newIndividual.scoreCache;
+    if (score<=bestLosingScore) return bestLosingScore;
     beam.add(newIndividual);
     double loserScore=Double.NEGATIVE_INFINITY;
     if (beam.size()>beamWidth){
@@ -104,12 +103,13 @@ public class BeamSearchConcurrent {
     private final BeamSearchConcurrent searcher;
     private ExecutorService threadPool;
     private int t;
+    private final int NTHREAD=10;
     public CalculationService(BeamSearchConcurrent searcher) {
       this.searcher=searcher;
     }
     public void run(){
       threadPool=Executors.newCachedThreadPool();
-      for (int i=0;i<10;i++){
+      for (int i=0;i<NTHREAD;i++){
         threadPool.submit(new Handler(searcher,t));
       }
       threadPool.shutdown();
@@ -147,7 +147,9 @@ public class BeamSearchConcurrent {
           double score=judge.score(workingPlayer);
           if (score<=bestLosingScoreCopy) continue;
           if (!judge.isValid(individual.player,workingPlayer)) continue;
-          double newBestLosingScore=offerBeam(individual, t, x, workingPlayer, score);
+          Individual newIndividual=new Individual(individual.mouseMovements.clone(),workingPlayer.clone(),score);
+          newIndividual.mouseMovements[t]=x;
+          double newBestLosingScore=offerBeam(newIndividual);
           if (newBestLosingScore>bestLosingScoreCopy) bestLosingScoreCopy=newBestLosingScore;
         }
       }
