@@ -188,8 +188,8 @@ public class BeamSearchConcurrent {
     try {
       DateFormat dateFormat=new SimpleDateFormat("yyyyMMddHHmmssSSS");
       String formattedDate=dateFormat.format(date);
-      BufferedWriter writer1=new BufferedWriter(new FileWriter(String.format("result-%s.txt",formattedDate),false));
-      BufferedWriter writer2=new BufferedWriter(new FileWriter(String.format("result-%s.mcsim",formattedDate),false));
+      BufferedWriter writer1=new BufferedWriter(new FileWriter(String.format("output/result-%s.txt",formattedDate),false));
+      BufferedWriter writer2=new BufferedWriter(new FileWriter(String.format("output/result-%s.mcsim",formattedDate),false));
       writer1.write(Arrays.toString(result.mouseMovements));
       writer1.newLine();
       writer1.newLine();

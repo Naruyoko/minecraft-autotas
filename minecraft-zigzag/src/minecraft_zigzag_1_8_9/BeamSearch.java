@@ -114,13 +114,13 @@ public class BeamSearch {
   public static void main(String[] args) {
     Date date=new Date();
     // BeamSearch searcher=new BeamSearch(100, 1000000, 100, new SmallZigzagJudge());
-    BeamSearch searcher=new BeamSearch(100, 1000000, 100, new SmallZigzagJudge2());
+    BeamSearch searcher=new BeamSearch(1, 1000000, 100, new SmallZigzagJudge2());
     Individual result=searcher.search(true);
     try {
       DateFormat dateFormat=new SimpleDateFormat("yyyyMMddHHmmssSSS");
       String formattedDate=dateFormat.format(date);
-      BufferedWriter writer1=new BufferedWriter(new FileWriter(String.format("result-%s.txt",formattedDate),false));
-      BufferedWriter writer2=new BufferedWriter(new FileWriter(String.format("result-%s.mcsim",formattedDate),false));
+      BufferedWriter writer1=new BufferedWriter(new FileWriter(String.format("output/result-%s.txt",formattedDate),false));
+      BufferedWriter writer2=new BufferedWriter(new FileWriter(String.format("output/result-%s.mcsim",formattedDate),false));
       writer1.write(Arrays.toString(result.mouseMovements));
       writer1.newLine();
       writer1.newLine();
