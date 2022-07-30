@@ -182,7 +182,8 @@ public class BeamSearchConcurrent {
   }
   public static void main(String[] args) {
     Date date=new Date();
-    BeamSearchConcurrent searcher=new BeamSearchConcurrent(100, 1000000, 100, new SmallZigzagJudge2());
+    // BeamSearchConcurrent searcher=new BeamSearchConcurrent(100, 1000000, 100, new SmallZigzagJudge2());
+    BeamSearchConcurrent searcher=new BeamSearchConcurrent(100, 1000000, 100, new LongSmallZigzagJudge());
     Individual result=searcher.search(true);
     try {
       DateFormat dateFormat=new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -195,7 +196,8 @@ public class BeamSearchConcurrent {
       Player player=searcher.judge.getStartingState();
       writer2.write(
         "!property"+System.lineSeparator()+
-        String.format("startPosition=%f,%f,%f",player.posX,100.0,player.posZ)+System.lineSeparator()+
+        // String.format("startPosition=%f,%f,%f",player.posX,100.0,player.posZ)+System.lineSeparator()+
+        String.format("startPosition=%f,%f,%f",player.posX,110.0,player.posZ)+System.lineSeparator()+
         String.format("startMotion=%f,%f,%f",player.velX,0.0,player.velZ)+System.lineSeparator()+
         "startInvulnerabilityFrames=0"+System.lineSeparator()+
         "startGametype=NOT_SET"+System.lineSeparator()+
