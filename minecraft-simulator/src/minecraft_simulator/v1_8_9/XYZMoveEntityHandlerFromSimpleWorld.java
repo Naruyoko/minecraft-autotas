@@ -67,10 +67,10 @@ public class XYZMoveEntityHandlerFromSimpleWorld implements IXYZMoveEntityHandle
       y=(double)player.stepHeight;
       collidingBoundingBoxes=collidable.getCollidingBoundingBoxes(XYZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,xNoBlock,y,zNoBlock));
       final XYZAxisAlignedBB boundingBoxStepping1=player.boundingBox.clone();
-      final XYZAxisAlignedBB axisalignedbb5=boundingBoxStepping1.addCoord(xNoBlock,0.0D,zNoBlock);
+      XYZAxisAlignedBB.copyAddCoord(workingBoundingBox,boundingBoxStepping1,xNoBlock,0.0D,zNoBlock);
       double yStepping1=y;
       for (XYZAxisAlignedBB blockBoundingBox:collidingBoundingBoxes){
-        yStepping1=blockBoundingBox.calculateYOffset(axisalignedbb5,yStepping1);
+        yStepping1=blockBoundingBox.calculateYOffset(workingBoundingBox,yStepping1);
       }
       boundingBoxStepping1.mutatingOffset(0.0D,yStepping1,0.0D);
       double xStepping1=xNoBlock;
@@ -112,8 +112,8 @@ public class XYZMoveEntityHandlerFromSimpleWorld implements IXYZMoveEntityHandle
         z=zStepping2;
         XYZAxisAlignedBB.copy(player.boundingBox,boundingBoxStepping2);
       }
-      for (XYZAxisAlignedBB axisalignedbb12:collidingBoundingBoxes){
-        y=axisalignedbb12.calculateYOffset(player.boundingBox, y);
+      for (XYZAxisAlignedBB blockBoundingBox:collidingBoundingBoxes){
+        y=blockBoundingBox.calculateYOffset(player.boundingBox, y);
       }
       player.boundingBox.mutatingOffset(0.0D,y,0.0D);
       if (xNoStepping*xNoStepping+zNoStepping*zNoStepping>=x*x+z*z){
