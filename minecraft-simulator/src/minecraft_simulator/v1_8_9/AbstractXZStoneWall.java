@@ -59,11 +59,11 @@ public abstract class AbstractXZStoneWall implements IXZMoveEntityHandler<Abstra
     for (XZAxisAlignedBB blockBoundingBox:collidingBoundingBoxes){
       x=blockBoundingBox.calculateHorizontalXOffset(player.boundingBox,x);
     }
-    player.boundingBox.move(x,0.0D);
+    player.boundingBox.mutatingOffset(x,0.0D);
     for (XZAxisAlignedBB blockBoundingBox:collidingBoundingBoxes){
       z=blockBoundingBox.calculateHorizontalZOffset(player.boundingBox,z);
     }
-    player.boundingBox.move(0.0D,z);
+    player.boundingBox.mutatingOffset(0.0D,z);
     player.resetPositionToBB();
     flagsOut.isCollidedHorizontally=xNoBlock!=x||zNoBlock!=z;
     flagsOut.isCollidedVertically=true;

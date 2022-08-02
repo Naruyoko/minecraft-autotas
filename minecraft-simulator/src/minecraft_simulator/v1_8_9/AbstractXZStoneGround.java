@@ -74,7 +74,7 @@ public abstract class AbstractXZStoneGround implements IXZMoveEntityHandler<Abst
         else z+=checkDelta;
       }
     }
-    player.boundingBox.move(x,z);
+    player.boundingBox.mutatingOffset(x,z);
     player.resetPositionToBB();
     flagsOut.isCollidedHorizontally=false;
     flagsOut.isCollidedVertically=hasAnyHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,x,z));

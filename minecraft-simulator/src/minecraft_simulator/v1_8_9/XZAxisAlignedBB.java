@@ -29,7 +29,7 @@ public class XZAxisAlignedBB implements Cloneable {
    * @param x
    * @param z
    */
-  public XZAxisAlignedBB move(double x,double z){
+  public XZAxisAlignedBB mutatingOffset(double x,double z){
     this.minX=this.minX+x;
     this.minZ=this.minZ+z;
     this.maxX=this.maxX+x;
@@ -37,7 +37,7 @@ public class XZAxisAlignedBB implements Cloneable {
     return this;
   }
   public static XZAxisAlignedBB copyOffset(XZAxisAlignedBB target,XZAxisAlignedBB source,double x,double z){
-    return copy(target,source).move(x,z);
+    return copy(target,source).mutatingOffset(x,z);
   }
   /**
    * Out-place and XZ-only version of {net.minecraft.util.AxisAlignedBB.offset(double, double, double)}
@@ -45,7 +45,7 @@ public class XZAxisAlignedBB implements Cloneable {
    * @param z
    */
   public XZAxisAlignedBB offset(double x,double z){
-    return this.clone().move(x,z);
+    return this.clone().mutatingOffset(x,z);
   }
   /**
    * In-place and XZ-only version of {net.minecraft.util.AxisAlignedBB.addCoord(double, double, double)}

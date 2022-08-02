@@ -38,7 +38,7 @@ public class XZMoveEntityHandlerFromCollidableSimpleGround implements IXZMoveEnt
         else z+=checkDelta;
       }
     }
-    player.boundingBox.move(x,z);
+    player.boundingBox.mutatingOffset(x,z);
     player.resetPositionToBB();
     flagsOut.isCollidedHorizontally=false;
     flagsOut.isCollidedVertically=ground.hasAnyHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,x,z));

@@ -90,7 +90,7 @@ public class SprintingClearStoneXZPlayer extends AbstractXZPlayer {
     // Return from moveFlying
     // Call to {net.minecraft.entity.Entity.moveEntity(double, double, double)}
     // Positions are calculated by manipulating the bounding boxes and updated by {net.minecraft.entity.Entity.resetPositionToBB()}
-    boundingBox.move(velX,velZ);
+    boundingBox.mutatingOffset(velX,velZ);
     posX=(boundingBox.minX+boundingBox.maxX)/2.0D;
     posZ=(boundingBox.minZ+boundingBox.maxZ)/2.0D;
     // Return from moveEntity

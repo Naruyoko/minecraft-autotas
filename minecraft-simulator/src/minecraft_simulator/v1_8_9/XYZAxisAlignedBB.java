@@ -31,7 +31,7 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
    * @param y
    * @param z
    */
-  public XYZAxisAlignedBB move(double x,double y,double z){
+  public XYZAxisAlignedBB mutatingOffset(double x,double y,double z){
     this.minX=this.minX+x;
     this.minY=this.minY+y;
     this.minZ=this.minZ+z;
@@ -41,7 +41,7 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
     return this;
   }
   public static XYZAxisAlignedBB copyOffset(XYZAxisAlignedBB target,XYZAxisAlignedBB source,double x,double y,double z){
-    return copy(target,source).move(x,y,z);
+    return copy(target,source).mutatingOffset(x,y,z);
   }
   /**
    * Out-place version of {net.minecraft.util.AxisAlignedBB.offset(double, double, double)}. This returns a new instance.
@@ -50,7 +50,7 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
    * @param z
    */
   public XYZAxisAlignedBB offset(double x,double y,double z){
-    return this.clone().move(x,y,z);
+    return this.clone().mutatingOffset(x,y,z);
   }
   /**
    * In-place version of {net.minecraft.util.AxisAlignedBB.addCoord(double, double, double)}
