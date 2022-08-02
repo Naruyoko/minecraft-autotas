@@ -99,6 +99,8 @@ public class StoneXYZPlayer extends AbstractXYZPlayer {
   public static final double sprintingMovementSpeedDouble=baseMovementSpeedDouble*(1.0D+sprintingSpeedBoostModifier);
   // {net.minecraft.entity.EntityLivingBase.moveEntityWithHeading(float, float)}
   private static final float blockFrictionFactor=slipperinessDefault*0.91F;
+  private static final double groundFriction=(double)blockFrictionFactor;
+  private static final double airFriction=(double)0.91F;
   private static final float friction_intermediate=0.16277136F/(blockFrictionFactor*blockFrictionFactor*blockFrictionFactor);
   public static final float frictionBase=((float)baseMovementSpeedDouble)*friction_intermediate;
   public static final float frictionSprinting=((float)sprintingMovementSpeedDouble)*friction_intermediate;
@@ -171,6 +173,8 @@ public class StoneXYZPlayer extends AbstractXYZPlayer {
       velZ+=(double)(forward*cosYaw+strafe*sinYaw);
     }
     // Return from moveFlying
+    // Note: friction is recalculated when on ground, assumption uses default sliperiness
+    final double XZdampFactor=onGround?groundFriction:airFriction;
     flagsIn.onGround=onGround;
     flagsIn.isSneaking=keySneak;
     moveEntityHandler.moveEntity(this, velX, velY, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
@@ -180,8 +184,8 @@ public class StoneXYZPlayer extends AbstractXYZPlayer {
     onGround=flagsOut.onGround;
     velY-=0.08D;
     velY*=0.9800000190734863D;
-    velX*=(double)blockFrictionFactor;
-    velZ*=(double)blockFrictionFactor;
+    velX*=XZdampFactor;
+    velZ*=XZdampFactor;
     // Return from moveEntityWithHeading
     // Return from (EntityLivingBase) onLivingUpdate
     jumpMovementFactor=isSprinting?jumpMovementFactorSprinting:jumpMovementFactorBase;
