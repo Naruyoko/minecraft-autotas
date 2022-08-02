@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.PriorityQueue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -36,13 +35,8 @@ public class BeamSearchConcurrent {
     this.beamWidth=beamWidth;
     this.angleStep=angleStep;
     this.judge=judge;
-    Comparator<Individual> comparator=new Comparator<Individual>(){
-      public int compare(Individual o1, Individual o2) {
-        return Double.compare(o1.scoreCache,o2.scoreCache);
-      }
-    };
     lastBeam=new ArrayBlockingQueue<Individual>(beamWidth);
-    beam=new PriorityQueue<Individual>(comparator);
+    beam=new PriorityQueue<Individual>();
     calculationService=new CalculationService(this);
   }
   public int getSolutionLength(){

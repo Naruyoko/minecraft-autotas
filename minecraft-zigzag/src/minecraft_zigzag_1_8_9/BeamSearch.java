@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -62,14 +61,9 @@ public class BeamSearch {
     }
   }
   public Individual search(boolean consoleOut){
-    Comparator<Individual> comparator=new Comparator<Individual>(){
-      public int compare(Individual o1, Individual o2) {
-        return Double.compare(o1.scoreCache,o2.scoreCache);
-      }
-    };
     SprintingClearStoneXZPlayer workingPlayer=judge.getStartingState();
-    PriorityQueue<Individual> lastBeam=new PriorityQueue<Individual>(comparator);
-    PriorityQueue<Individual> beam=new PriorityQueue<Individual>(comparator);
+    PriorityQueue<Individual> lastBeam=new PriorityQueue<Individual>();
+    PriorityQueue<Individual> beam=new PriorityQueue<Individual>();
     beam.add(new Individual(new int[solutionLength],workingPlayer.clone(),judge.score(workingPlayer)));
     long lastNanoTime=System.nanoTime();
     for (int t=0;t<solutionLength;t++){
