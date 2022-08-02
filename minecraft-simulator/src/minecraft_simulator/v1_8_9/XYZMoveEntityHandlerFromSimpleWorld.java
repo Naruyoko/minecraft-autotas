@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * A utility class for a world handling movement with given collidable that do not have any special effect.
  */
-public abstract class XYZMoveEntityHandlerFromSimpleWorld implements IXYZMoveEntityHandler<AbstractXYZPlayer> {
+public class XYZMoveEntityHandlerFromSimpleWorld implements IXYZMoveEntityHandler<AbstractXYZPlayer> {
   public final ICollidable collidable;
   public XYZMoveEntityHandlerFromSimpleWorld(ICollidable collidable) {
     this.collidable = collidable;
