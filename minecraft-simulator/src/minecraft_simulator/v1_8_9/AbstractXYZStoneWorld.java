@@ -86,7 +86,7 @@ public abstract class AbstractXYZStoneWorld implements IXYZMoveEntityHandler<Abs
     final double xNoBlock=x;
     final double yNoBlock=y;
     final double zNoBlock=z;
-    List<XYZAxisAlignedBB> collidingBoundingBoxes=getCollidingBoundingBoxes(XYZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,x,y,z));
+    List<XYZAxisAlignedBB> collidingBoundingBoxes=getCollidingBoundingBoxes(XYZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,x,y,z));
     final XYZAxisAlignedBB boundingBoxBefore=player.boundingBox.clone();
     for (XYZAxisAlignedBB blockBoundingBox:collidingBoundingBoxes){
       y=blockBoundingBox.calculateYOffset(player.boundingBox,y);
@@ -107,7 +107,7 @@ public abstract class AbstractXYZStoneWorld implements IXYZMoveEntityHandler<Abs
       final XYZAxisAlignedBB boundingBoxNoStepping=player.boundingBox.clone();
       XYZAxisAlignedBB.copy(player.boundingBox,boundingBoxBefore);
       y=(double)player.stepHeight;
-      collidingBoundingBoxes=getCollidingBoundingBoxes(XYZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,xNoBlock,y,zNoBlock));
+      collidingBoundingBoxes=getCollidingBoundingBoxes(XYZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,xNoBlock,y,zNoBlock));
       final XYZAxisAlignedBB boundingBoxStepping1=player.boundingBox.clone();
       final XYZAxisAlignedBB axisalignedbb5=boundingBoxStepping1.addCoord(xNoBlock,0.0D,zNoBlock);
       double yStepping1=y;

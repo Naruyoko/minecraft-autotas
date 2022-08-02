@@ -55,7 +55,7 @@ public abstract class AbstractXZStoneWall implements IXZMoveEntityHandler<Abstra
     XZAxisAlignedBB workingBoundingBox=player.boundingBox.clone();
     final double xNoBlock=x;
     final double zNoBlock=z;
-    List<XZAxisAlignedBB> collidingBoundingBoxes=getHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,x,z));
+    List<XZAxisAlignedBB> collidingBoundingBoxes=getHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,x,z));
     for (XZAxisAlignedBB blockBoundingBox:collidingBoundingBoxes){
       x=blockBoundingBox.calculateHorizontalXOffset(player.boundingBox,x);
     }

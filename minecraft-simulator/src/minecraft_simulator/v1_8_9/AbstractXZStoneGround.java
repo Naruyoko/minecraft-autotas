@@ -77,7 +77,7 @@ public abstract class AbstractXZStoneGround implements IXZMoveEntityHandler<Abst
     player.boundingBox.move(x,z);
     player.resetPositionToBB();
     flagsOut.isCollidedHorizontally=false;
-    flagsOut.isCollidedVertically=flagsIn.checkStepping&&flagsIn.onGround?hasAnyHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,x,z)):hasAnyHorizontallyCollidingBoundingBoxes(player.boundingBox);
+    flagsOut.isCollidedVertically=hasAnyHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,x,z));
     flagsOut.onGround=flagsOut.isCollidedVertically;
     flagsOut.isCollided=flagsOut.isCollidedHorizontally||flagsOut.isCollidedVertically;
     //Call to {net.minecraft.entity.Entity.updateFallState(double, boolean, Block, BlockPos)}, ommited
