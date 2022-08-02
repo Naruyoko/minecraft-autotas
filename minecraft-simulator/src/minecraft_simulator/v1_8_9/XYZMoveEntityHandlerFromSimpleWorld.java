@@ -131,6 +131,10 @@ public class XYZMoveEntityHandlerFromSimpleWorld implements IXYZMoveEntityHandle
     //Call to {net.minecraft.entity.Entity.updateFallState(double, boolean, Block, BlockPos)}, ommited
     if (xNoBlock!=x) player.velX=0.0D;
     if (zNoBlock!=z) player.velZ=0.0D;
+    if (yNoBlock!=y){
+      // Call to {net.minecraft.block.Block.onLanded(World, Entity)}, assumption calls for default behavior
+      player.velY=0.0D;
+    }
     return flagsOut;
   }
   public void moveEntity(AbstractXYZPlayer player,double x,double y,double z){
