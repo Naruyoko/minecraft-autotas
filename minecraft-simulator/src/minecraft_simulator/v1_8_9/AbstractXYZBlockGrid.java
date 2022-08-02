@@ -25,7 +25,8 @@ public abstract class AbstractXYZBlockGrid implements ICollidable {
     for (int x=minX;x<maxX;x++){
       for (int z=minZ;z<maxZ;z++){
         for (int y=minY-1;y<maxY;y++){
-          getBlockAt(x, y, z).addCollisionBoxesToList(x, y, z, bb, list);
+          Block block=getBlockAt(x, y, z);
+          if (block!=null) block.addCollisionBoxesToList(x, y, z, bb, list);
         }
       }
     }
@@ -47,7 +48,8 @@ public abstract class AbstractXYZBlockGrid implements ICollidable {
     for (int x=minX;x<maxX;x++){
       for (int z=minZ;z<maxZ;z++){
         for (int y=minY-1;y<maxY;y++){
-          if (getBlockAt(x, y, z).hasAnyCollidingBoundingBoxes(x,y,z,bb)) return true;
+          Block block=getBlockAt(x, y, z);
+          if (block!=null&&block.hasAnyCollidingBoundingBoxes(x,y,z,bb)) return true;
         }
       }
     }

@@ -22,7 +22,8 @@ public abstract class AbstractXZBlockGrid implements IHorizontallyCollidable {
     final int maxZ=MathHelper.floor_double(bb.maxZ+1.0D);
     for (int x=minX;x<maxX;x++){
       for (int z=minZ;z<maxZ;z++){
-        getBlockAt(x, z).addCollisionBoxesToList(x, z, bb, list);
+        Block block=getBlockAt(x, z);
+        if (block!=null) block.addCollisionBoxesToList(x, z, bb, list);
       }
     }
     return list;
@@ -40,7 +41,8 @@ public abstract class AbstractXZBlockGrid implements IHorizontallyCollidable {
     final int maxZ=MathHelper.floor_double(bb.maxZ+1.0D);
     for (int x=minX;x<maxX;x++){
       for (int z=minZ;z<maxZ;z++){
-        if (getBlockAt(x, z).hasAnyCollidingBoundingBoxes(x,z,bb)) return true;
+        Block block=getBlockAt(x, z);
+        if (block!=null&&block.hasAnyCollidingBoundingBoxes(x,z,bb)) return true;
       }
     }
     return false;
