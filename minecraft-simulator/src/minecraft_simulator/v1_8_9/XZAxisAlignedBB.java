@@ -54,8 +54,8 @@ public class XZAxisAlignedBB implements Cloneable {
    */
   public XZAxisAlignedBB mutatingAddCoord(double x,double z){
     if (x<0.0D) this.minX+=x;
-    else if (x>0.0D) this.minX+=z;
-    if (z<0.0D) this.maxZ+=x;
+    else if (x>0.0D) this.maxX+=z;
+    if (z<0.0D) this.minZ+=x;
     else if (z>0.0D) this.maxZ+=z;
     return this;
   }

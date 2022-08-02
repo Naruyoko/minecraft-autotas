@@ -60,10 +60,10 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
    */
   public XYZAxisAlignedBB mutatingAddCoord(double x,double y,double z){
     if (x<0.0D) this.minX+=x;
-    else if (x>0.0D) this.minX+=z;
-    if (z<0.0D) this.maxY+=x;
+    else if (x>0.0D) this.maxX+=z;
+    if (z<0.0D) this.minY+=x;
     else if (z>0.0D) this.maxY+=z;
-    if (z<0.0D) this.maxZ+=x;
+    if (z<0.0D) this.minZ+=x;
     else if (z>0.0D) this.maxZ+=z;
     return this;
   }
