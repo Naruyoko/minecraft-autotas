@@ -65,7 +65,7 @@ public class XYZMoveEntityHandlerFromSimpleWorld implements IXYZMoveEntityHandle
       final XYZAxisAlignedBB boundingBoxNoStepping=player.boundingBox.clone();
       XYZAxisAlignedBB.copy(player.boundingBox,boundingBoxBefore);
       y=(double)player.stepHeight;
-      collidingBoundingBoxes=collidable.getCollidingBoundingBoxes(XYZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,xNoBlock,y,zNoBlock));
+      // collidingBoundingBoxes=collidable.getCollidingBoundingBoxes(XYZAxisAlignedBB.copyAddCoord(workingBoundingBox,player.boundingBox,xNoBlock,y,zNoBlock));
       final XYZAxisAlignedBB boundingBoxStepping1=player.boundingBox.clone();
       XYZAxisAlignedBB.copyAddCoord(workingBoundingBox,boundingBoxStepping1,xNoBlock,0.0D,zNoBlock);
       double yStepping1=y;
