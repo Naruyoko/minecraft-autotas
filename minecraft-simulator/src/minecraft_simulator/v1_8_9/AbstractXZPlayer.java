@@ -39,6 +39,9 @@ public abstract class AbstractXZPlayer {
    * @param pixels
    */
   public abstract void moveCamera(int pixels);
+  /**
+   * See {net.minecraft.entity.Entity.resetPositionToBB()}
+   */
   public void resetPositionToBB(){
     posX=(boundingBox.minX+boundingBox.maxX)/2.0D;
     posZ=(boundingBox.minZ+boundingBox.maxZ)/2.0D;
