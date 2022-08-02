@@ -13,11 +13,29 @@ public class Utility {
     else if (value>0) return '+'+r;
     else return r;
   }
-  public static final double blockMinXZ=(double)0F;
-  public static final double blockMaxXZ=(double)1F;
-  public static boolean intersectsXZBlock(SprintingClearStoneXZPlayer player,int x,int z){
-    // See {net.minecraft.block.Block.getCollisionBoundingBox(World, BlockPos, IBlockState)}
-    MutableXZAxisAlignedBB blockbb=new MutableXZAxisAlignedBB((double)x+blockMinXZ,(double)z+blockMinXZ,(double)x+blockMaxXZ,(double)z+blockMaxXZ);
-    return blockbb.intersectsHorizontally(player.boundingBox);
-  }
+  // /**
+  //  * See {net.minecraft.block.Block.getCollisionBoundingBox(World, BlockPos, IBlockState)}
+  //  * @param x
+  //  * @param z
+  //  * @return
+  //  */
+  // public static XZAxisAlignedBB fullXZBlockBB(int x,int z){
+  //   return Blocks.fullBlock.getCollisionBoundingBox(x, z);
+  // }
+  // public static boolean intersectsXZBlock(AbstractXZPlayer player,int x,int z){
+  //   return fullXZBlockBB(x, z).intersectsHorizontallyWith(player.boundingBox);
+  // }
+  // /**
+  //  * See {net.minecraft.block.Block.getCollisionBoundingBox(World, BlockPos, IBlockState)}
+  //  * @param x
+  //  * @param y
+  //  * @param z
+  //  * @return
+  //  */
+  // public static XYZAxisAlignedBB fullBlockBB(int x,int y,int z){
+  //   return Blocks.fullBlock.getCollisionBoundingBox(x, y, z);
+  // }
+  // public static boolean intersectsBlock(AbstractXYZPlayer player,int x,int y,int z){
+  //   return fullBlockBB(x, y, z).intersectsWith(player.boundingBox);
+  // }
 }

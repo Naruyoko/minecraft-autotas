@@ -1,9 +1,9 @@
 package minecraft_zigzag_1_8_9;
 
+import minecraft_simulator.v1_8_9.Blocks;
 import minecraft_simulator.v1_8_9.MathHelper;
-import minecraft_simulator.v1_8_9.MutableXZAxisAlignedBB;
+import minecraft_simulator.v1_8_9.XZAxisAlignedBB;
 import minecraft_simulator.v1_8_9.SprintingClearStoneXZPlayer;
-import minecraft_simulator.v1_8_9.Utility;
 
 public class SmallZigzagJudge implements IJudge {
   public static final SprintingClearStoneXZPlayer startingState=new SprintingClearStoneXZPlayer(-0.5,0.5,0,0,0);
@@ -18,16 +18,16 @@ public class SmallZigzagJudge implements IJudge {
   boolean canStandOnBlock(SprintingClearStoneXZPlayer player,int x,int z){
     // Calculate path shape
     if (x>=0||x<-3||z<0||!pathShape[(-1-x)*4+z%4]) return false;
-    return Utility.intersectsXZBlock(player,x,z);
+    return Blocks.fullBlock.hasAnyCollidingBoundingBoxes(x, z, player.boundingBox);
   }
   /**
    * See {net.minecraft.world.World.getCollidingBoundingBoxes(Entity, AxisAlignedBB)} for the list of blocks checked
    * @param player
-   * @return whether the player would be on ground on the next tick
+   * @return
    */
   boolean onGround(SprintingClearStoneXZPlayer player){
     // See {net.minecraft.world.World.getCollidingBoundingBoxes(Entity, AxisAlignedBB)}
-    MutableXZAxisAlignedBB bb=player.boundingBox;
+    XZAxisAlignedBB bb=player.boundingBox;
     int minX=MathHelper.floor_double(bb.minX);
     int maxX=MathHelper.floor_double(bb.maxX+1.0D);
     int minZ=MathHelper.floor_double(bb.minZ);

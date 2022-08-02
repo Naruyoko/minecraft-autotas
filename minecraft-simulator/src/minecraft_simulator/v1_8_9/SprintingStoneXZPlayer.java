@@ -3,25 +3,36 @@ package minecraft_simulator.v1_8_9;
 /**
  * Simulates the player movement assuming with following restrictions:
  * - Always sprinting
- * - No block interactions
+ * - No sneaking
  * - Assumed to be on ground with normal slipperiness
  * - No falling (XZ-only)
  */
-public class SprintingClearStoneXZPlayer extends AbstractXZPlayer {
-  public SprintingClearStoneXZPlayer(XZAxisAlignedBB boundingBox,double posX,double posZ,double velX,double velZ,float yaw) {
+public class SprintingStoneXZPlayer extends AbstractXZPlayer {
+  public final SimulationFlagsIn flagsIn=new SimulationFlagsIn();
+  public final SimulationFlagsOut flagsOut=new SimulationFlagsOut();
+  public SprintingStoneXZPlayer(XZAxisAlignedBB boundingBox,double posX,double posZ,double velX,double velZ,float yaw) {
     super(boundingBox, posX, posZ, velX, velZ, yaw);
+    init();
   }
-  public SprintingClearStoneXZPlayer(double posX,double posZ,double velX,double velZ,float yaw) {
+  public SprintingStoneXZPlayer(double posX,double posZ,double velX,double velZ,float yaw) {
     super(posX, posZ, velX, velZ, yaw);
+    init();
   }
-  public SprintingClearStoneXZPlayer() {
+  public SprintingStoneXZPlayer() {
     super();
+    init();
+  }
+  public void init(){
+    flagsIn.checkSneaking=false;
+    flagsIn.checkStepping=true;
+    flagsIn.isSneaking=false;
+    flagsIn.onGround=true;
   }
   @Override
-  public SprintingClearStoneXZPlayer clone() {
-    return new SprintingClearStoneXZPlayer(boundingBox.clone(), posX, posZ, velX, velZ, yaw);
+  public SprintingStoneXZPlayer clone() {
+    return new SprintingStoneXZPlayer(boundingBox.clone(), posX, posZ, velX, velZ, yaw);
   }
-  public static void copy(SprintingClearStoneXZPlayer target,SprintingClearStoneXZPlayer source){
+  public static void copy(SprintingStoneXZPlayer target,SprintingStoneXZPlayer source){
     AbstractXZPlayer.copy(target, source);
   }
 
@@ -60,13 +71,14 @@ public class SprintingClearStoneXZPlayer extends AbstractXZPlayer {
   public static final float MOVE_FORWARD=1.0F;
   public static final float MOVE_BACKWARD=-1.0F;
   /**
-   * Simulate 1 tick of movement on a normal flat surface given the yaw while springting
+   * Simulate 1 tick of movement on a normal flat surface with walls while sprinting
    * See {net.minecraft.entity.EntityLivingBase.onLivingUpdate()}
    * See {net.minecraft.util.MovementInputFromOptions.updatePlayerMoveState()} and {net.minecraft.client.entity.EntityPlayerSP.updateEntityActionState()} for the source of the movement inputs
+   * @param world World that handles movement
    * @param movementInputMoveStrafe +1.0F if inputting strafe left, -1.0F if inputting strafe right
    * @param movementInputMoveForward +1.0F if inputting move forward, -1.0F if inputting move backward
    */
-  public void step(final float movementInputMoveStrafe,final float movementInputMoveForward) {
+  public void step(final IXZMoveEntityHandler<? super SprintingStoneXZPlayer> world,final float movementInputMoveStrafe,final float movementInputMoveForward) {
     if (Math.abs(this.velX)<0.005D) this.velX=0.0D;
     if (Math.abs(this.velZ)<0.005D) this.velZ=0.0D;
     // Call to {net.minecraft.entity.player.EntityPlayer.jump()} if jumping, omitted
@@ -88,33 +100,9 @@ public class SprintingClearStoneXZPlayer extends AbstractXZPlayer {
       velZ+=(double)(forward*cosYaw+strafe*sinYaw);
     }
     // Return from moveFlying
-    // Call to {net.minecraft.entity.Entity.moveEntity(double, double, double)}
-    // Positions are calculated by manipulating the bounding boxes and updated by {net.minecraft.entity.Entity.resetPositionToBB()}
-    boundingBox.move(velX,velZ);
-    posX=(boundingBox.minX+boundingBox.maxX)/2.0D;
-    posZ=(boundingBox.minZ+boundingBox.maxZ)/2.0D;
-    // Return from moveEntity
+    world.moveEntity(this, velX, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
     velX*=(double)blockFrictionFactor;
     velZ*=(double)blockFrictionFactor;
     // Return from moveEntityWithHeading
-  }
-  public static void main(String[] args) {
-    for (int i=-900;i<=900;i+=100){
-      for (float j:new float[]{-1F,0F,1F}){
-        SprintingClearStoneXZPlayer player=new SprintingClearStoneXZPlayer(0,0,0,0,0);
-        player.moveCamera(i);
-        player.step(j,1F);
-        System.out.println(String.format("%4d %2d %-22s %-22s %-22s %-22s",i,(int)j,Utility.padSignDouble(player.posX),Utility.padSignDouble(player.posZ),Utility.padSignDouble(player.velX),Utility.padSignDouble(player.velZ)));
-      }
-    }
-    for (float j:new float[]{0F,1F}){
-      System.out.println();
-      SprintingClearStoneXZPlayer player=new SprintingClearStoneXZPlayer(0,0,0,0,0);
-      player.moveCamera((int)j*300);
-      for (int t=0;t<10;t++){
-        player.step(j,1F);
-        System.out.println(String.format("%2d %2d %-22s %-22s %-22s %-22s",(int)j,t+1,Utility.padSignDouble(player.posX),Utility.padSignDouble(player.posZ),Utility.padSignDouble(player.velX),Utility.padSignDouble(player.velZ)));
-      }
-    }
   }
 }
