@@ -115,14 +115,14 @@ public class StoneXYZPlayer extends AbstractXYZPlayer {
    * Simulate 1 tick of horizontal movement
    * See {net.minecraft.client.entity.EntityPlayerSP.onLivingUpdate()}
    * See {net.minecraft.util.MovementInputFromOptions.updatePlayerMoveState()} and {net.minecraft.client.entity.EntityPlayerSP.updateEntityActionState()} for the source of the movement inputs
-   * @param movementHandler
+   * @param moveEntityHandler
    * @param keyStrafe +1.0F if inputting strafe left, -1.0F if inputting strafe right
    * @param keyForward +1.0F if inputting move forward, -1.0F if inputting move backward
    * @param keyJump
    * @param keySprint
    * @param keySneak
    */
-  public void step(final IXYZMoveEntityHandler<? super StoneXYZPlayer> movementHandler,final float keyStrafe,final float keyForward,final boolean keyJump,final boolean keySprint,final boolean keySneak) {
+  public void step(final IXYZMoveEntityHandler<? super StoneXYZPlayer> moveEntityHandler,final float keyStrafe,final float keyForward,final boolean keyJump,final boolean keySprint,final boolean keySneak) {
     if (sprintingTicksLeft>0&&--sprintingTicksLeft==0) isSprinting=false;
     // Call to {net.minecraft.util.MovementInputFromOptions.updatePlayerMoveState()}
     final float movementInputMoveStrafing=keySneak?(float)((double)keyStrafe*0.3D):keyStrafe;
@@ -173,7 +173,7 @@ public class StoneXYZPlayer extends AbstractXYZPlayer {
     // Return from moveFlying
     flagsIn.onGround=onGround;
     flagsIn.isSneaking=keySneak;
-    movementHandler.moveEntity(this, velX, velY, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
+    moveEntityHandler.moveEntity(this, velX, velY, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
     isCollidedHorizontally=flagsOut.isCollidedHorizontally;
     isCollidedVertically=flagsOut.isCollidedVertically;
     isCollided=flagsOut.isCollided;
