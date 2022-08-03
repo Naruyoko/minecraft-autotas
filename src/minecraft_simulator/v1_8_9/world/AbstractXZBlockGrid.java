@@ -12,6 +12,13 @@ import minecraft_simulator.v1_8_9.util.MathHelper;
  * A utility class for a horizontally collidable made as grid of blocks.
  */
 public abstract class AbstractXZBlockGrid implements IHorizontallyCollidable {
+  /**
+   * Gets the block at the coordinates. Returned value must not be null.
+   * 
+   * @param x
+   * @param z
+   * @return
+   */
   public abstract Block getBlockAt(int x, int z);
 
   /**
@@ -30,9 +37,7 @@ public abstract class AbstractXZBlockGrid implements IHorizontallyCollidable {
     final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
     for (int x = minX; x < maxX; x++) {
       for (int z = minZ; z < maxZ; z++) {
-        Block block = getBlockAt(x, z);
-        if (block != null)
-          block.addCollisionBoxesToList(x, z, bb, list);
+        getBlockAt(x, z).addCollisionBoxesToList(x, z, bb, list);
       }
     }
     return list;
@@ -52,8 +57,7 @@ public abstract class AbstractXZBlockGrid implements IHorizontallyCollidable {
     final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
     for (int x = minX; x < maxX; x++) {
       for (int z = minZ; z < maxZ; z++) {
-        Block block = getBlockAt(x, z);
-        if (block != null && block.hasAnyCollidingBoundingBoxes(x, z, bb))
+        if (getBlockAt(x, z).hasAnyCollidingBoundingBoxes(x, z, bb))
           return true;
       }
     }

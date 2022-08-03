@@ -12,6 +12,14 @@ import minecraft_simulator.v1_8_9.util.MathHelper;
  * A utility class for a collidable made as grid of blocks.
  */
 public abstract class AbstractXYZBlockGrid implements ICollidable {
+  /**
+   * Gets the block at the coordinates. Returned value must not be null.
+   * 
+   * @param x
+   * @param y
+   * @param z
+   * @return
+   */
   public abstract Block getBlockAt(int x, int y, int z);
 
   /**
@@ -33,9 +41,7 @@ public abstract class AbstractXYZBlockGrid implements ICollidable {
     for (int x = minX; x < maxX; x++) {
       for (int z = minZ; z < maxZ; z++) {
         for (int y = minY - 1; y < maxY; y++) {
-          Block block = getBlockAt(x, y, z);
-          if (block != null)
-            block.addCollisionBoxesToList(x, y, z, bb, list);
+          getBlockAt(x, y, z).addCollisionBoxesToList(x, y, z, bb, list);
         }
       }
     }
@@ -59,8 +65,7 @@ public abstract class AbstractXYZBlockGrid implements ICollidable {
     for (int x = minX; x < maxX; x++) {
       for (int z = minZ; z < maxZ; z++) {
         for (int y = minY - 1; y < maxY; y++) {
-          Block block = getBlockAt(x, y, z);
-          if (block != null && block.hasAnyCollidingBoundingBoxes(x, y, z, bb))
+          if (getBlockAt(x, y, z).hasAnyCollidingBoundingBoxes(x, y, z, bb))
             return true;
         }
       }

@@ -263,7 +263,7 @@ public class StoneXYZPlayer extends AbstractXYZPlayer {
             }
             if ((x == 7 || x == 8) && y == 81 && (z == 25 || z == 26))
               return Blocks.fullBlock;
-            return null;
+            return Blocks.air;
           }
         });
     float keyStrafe = 0.0F;
