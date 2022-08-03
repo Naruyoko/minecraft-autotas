@@ -3,5 +3,11 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar"
-    ]
+    ],
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "[java]": {
+        "editor.detectIndentation": true
+    },
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
 }

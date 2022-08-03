@@ -6,13 +6,13 @@ public class Individual implements Comparable<Individual> {
   public int[] mouseMovements;
   public SprintingClearStoneXZPlayer player;
   public double scoreCache;
-  public Individual(int[] mouseMovements,SprintingClearStoneXZPlayer player,double scoreCache){
-    this.mouseMovements=mouseMovements;
-    this.player=player;
-    this.scoreCache=scoreCache;
+
+  public Individual(int[] mouseMovements, SprintingClearStoneXZPlayer player, double scoreCache) {
+    this.mouseMovements = mouseMovements;
+    this.player = player;
+    this.scoreCache = scoreCache;
   }
+
   @Override
-  public int compareTo(Individual other) {
-    return Double.compare(this.scoreCache,other.scoreCache);
-  }
+  public int compareTo(Individual other) { return Double.compare(this.scoreCache, other.scoreCache); }
 }
