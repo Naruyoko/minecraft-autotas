@@ -130,7 +130,7 @@ public class StoneXYZPlayer extends AbstractXYZPlayer {
     final float movementInputMoveStrafing=keySneak?(float)((double)keyStrafe*0.3D):keyStrafe;
     final float movementInputMoveForward=keySneak?(float)((double)keyForward*0.3D):keyForward;
     // Return from updatePlayerMoveState
-    if (!isSprinting&&movementInputMoveForward>=0.8F){
+    if (!isSprinting&&keySprint&&movementInputMoveForward>=0.8F){
       isSprinting=true;
       sprintingTicksLeft=600;
     }
