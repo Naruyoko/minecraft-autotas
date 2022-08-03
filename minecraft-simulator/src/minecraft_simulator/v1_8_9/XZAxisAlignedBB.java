@@ -54,8 +54,8 @@ public class XZAxisAlignedBB implements Cloneable {
    */
   public XZAxisAlignedBB mutatingAddCoord(double x,double z){
     if (x<0.0D) this.minX+=x;
-    else if (x>0.0D) this.maxX+=z;
-    if (z<0.0D) this.minZ+=x;
+    else if (x>0.0D) this.maxX+=x;
+    if (z<0.0D) this.minZ+=z;
     else if (z>0.0D) this.maxZ+=z;
     return this;
   }
@@ -69,14 +69,6 @@ public class XZAxisAlignedBB implements Cloneable {
    */
   public XZAxisAlignedBB addCoord(double x,double z){
     return this.clone().mutatingAddCoord(x, z);
-  }
-  /**
-   * XZ-only version of {net.minecraft.util.AxisAlignedBB.intersectsWith(AxisAlignedBB)}
-   * @param other
-   * @return
-   */
-  public boolean intersectsHorizontallyWith(XZAxisAlignedBB other) {
-    return other.maxX>this.minX&&other.minX<this.maxX&&other.maxZ>this.minZ&&other.minZ<this.maxZ;
   }
   /**
    * XZ-only version of {net.minecraft.util.AxisAlignedBB.calculateXOffset(AxisAlignedBB, double)}
@@ -101,5 +93,13 @@ public class XZAxisAlignedBB implements Cloneable {
       else if (offsetZ<0.0D&&other.minZ>=this.maxZ) return Math.max(this.maxZ-other.minZ,offsetZ);
       else return offsetZ;
     }else return offsetZ;
+  }
+  /**
+   * XZ-only version of {net.minecraft.util.AxisAlignedBB.intersectsWith(AxisAlignedBB)}
+   * @param other
+   * @return
+   */
+  public boolean intersectsHorizontallyWith(XZAxisAlignedBB other) {
+    return other.maxX>this.minX&&other.minX<this.maxX&&other.maxZ>this.minZ&&other.minZ<this.maxZ;
   }
 }

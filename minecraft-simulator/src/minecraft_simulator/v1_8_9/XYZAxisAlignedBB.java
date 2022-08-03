@@ -60,10 +60,10 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
    */
   public XYZAxisAlignedBB mutatingAddCoord(double x,double y,double z){
     if (x<0.0D) this.minX+=x;
-    else if (x>0.0D) this.maxX+=z;
-    if (z<0.0D) this.minY+=x;
-    else if (z>0.0D) this.maxY+=z;
-    if (z<0.0D) this.minZ+=x;
+    else if (x>0.0D) this.maxX+=x;
+    if (y<0.0D) this.minY+=y;
+    else if (y>0.0D) this.maxY+=y;
+    if (z<0.0D) this.minZ+=z;
     else if (z>0.0D) this.maxZ+=z;
     return this;
   }
@@ -78,14 +78,6 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
    */
   public XYZAxisAlignedBB addCoord(double x,double y,double z){
     return this.clone().mutatingAddCoord(x, y, z);
-  }
-  /**
-   * See {net.minecraft.util.AxisAlignedBB.intersectsWith(AxisAlignedBB)}
-   * @param other
-   * @return
-   */
-  public boolean intersectsWith(XYZAxisAlignedBB other) {
-    return other.maxX>this.minX&&other.minX<this.maxX&&other.maxY>this.minY&&other.minY<this.maxY&&other.maxZ>this.minZ&&other.minZ<this.maxZ;
   }
   /**
    * See {net.minecraft.util.AxisAlignedBB.calculateXOffset(AxisAlignedBB, double)}
@@ -122,5 +114,13 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
       else if (offsetZ<0.0D&&other.minZ>=this.maxZ) return Math.max(this.maxZ-other.minZ,offsetZ);
       else return offsetZ;
     }else return offsetZ;
+  }
+  /**
+   * See {net.minecraft.util.AxisAlignedBB.intersectsWith(AxisAlignedBB)}
+   * @param other
+   * @return
+   */
+  public boolean intersectsWith(XYZAxisAlignedBB other) {
+    return other.maxX>this.minX&&other.minX<this.maxX&&other.maxY>this.minY&&other.minY<this.maxY&&other.maxZ>this.minZ&&other.minZ<this.maxZ;
   }
 }

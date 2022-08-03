@@ -52,11 +52,11 @@ public class Block {
    */
   public void addCollisionBoxesToList(int x,int y,int z,XYZAxisAlignedBB mask,List<XYZAxisAlignedBB> list){
     XYZAxisAlignedBB bb=getCollisionBoundingBox(x, y, z);
-    if (bb!=null&&mask.intersectsHorizontallyWith(bb)) list.add(bb);
+    if (bb!=null&&mask.intersectsWith(bb)) list.add(bb);
   }
   public boolean hasAnyCollidingBoundingBoxes(int x,int y,int z,XYZAxisAlignedBB mask){
     XYZAxisAlignedBB bb=getCollisionBoundingBox(x, y, z);
-    return bb!=null&&mask.intersectsHorizontallyWith(bb);
+    return bb!=null&&mask.intersectsWith(bb);
   }
   /**
    * See {net.minecraft.block.Block.getCollisionBoundingBox(World, BlockPos, IBlockState)}
