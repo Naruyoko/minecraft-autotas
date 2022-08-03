@@ -54,7 +54,7 @@ public class XZMoveEntityHandlerFromCollidableSimpleWall implements IXZMoveEntit
   public void moveEntity(AbstractXZPlayer player, double x, double z) {
     SimulationFlagsIn flags = new SimulationFlagsIn();
     if (player instanceof ISimulationFlagCommuniator)
-      ((ISimulationFlagCommuniator)player).setSimulationFlags(flags);
+      ((ISimulationFlagCommuniator)player).setSimulationFlagsIn(flags);
     SimulationFlagsOut flagsOut = new SimulationFlagsOut();
     moveEntity(player, x, z, flags, flagsOut);
     if (player instanceof ISimulationFlagCommuniator)

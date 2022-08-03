@@ -217,7 +217,7 @@ public abstract class AbstractXYZStoneWorld implements IXYZMoveEntityHandler<Abs
   public void moveEntity(AbstractXYZPlayer player, double x, double y, double z) {
     SimulationFlagsIn flags = new SimulationFlagsIn();
     if (player instanceof ISimulationFlagCommuniator)
-      ((ISimulationFlagCommuniator)player).setSimulationFlags(flags);
+      ((ISimulationFlagCommuniator)player).setSimulationFlagsIn(flags);
     SimulationFlagsOut flagsOut = new SimulationFlagsOut();
     moveEntity(player, x, y, z, flags, flagsOut);
     if (player instanceof ISimulationFlagCommuniator)
