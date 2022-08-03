@@ -96,12 +96,12 @@ public abstract class AbstractXZStoneGroundAndWall implements IXZMoveEntityHandl
         else if (x>0.0D) x-=checkDelta;
         else x+=checkDelta;
       }
-      while (z!=0.0D&&hasAnyHorizontallyCollidingGroundBoundingBoxes(XZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,0.0D,z))){
+      while (z!=0.0D&&!hasAnyHorizontallyCollidingGroundBoundingBoxes(XZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,0.0D,z))){
         if (z<checkDelta&&z>=-checkDelta) z=0.0D;
         else if (z>0.0D) z-=checkDelta;
         else z+=checkDelta;
       }
-      while (x!=0.0D&&z!=0.0D&&hasAnyHorizontallyCollidingGroundBoundingBoxes(XZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,x,z))){
+      while (x!=0.0D&&z!=0.0D&&!hasAnyHorizontallyCollidingGroundBoundingBoxes(XZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,x,z))){
         if (x<checkDelta&&x>=-checkDelta) x=0.0D;
         else if (x>0.0D) x-=checkDelta;
         else x+=checkDelta;

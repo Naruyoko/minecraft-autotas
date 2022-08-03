@@ -27,12 +27,12 @@ public class XYZMoveEntityHandlerFromSimpleWorld implements IXYZMoveEntityHandle
         else if (x>0.0D) x-=checkDelta;
         else x+=checkDelta;
       }
-      while (z!=0.0D&&collidable.hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,0.0D,-1.0D,z))){
+      while (z!=0.0D&&!collidable.hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,0.0D,-1.0D,z))){
         if (z<checkDelta&&z>=-checkDelta) z=0.0D;
         else if (z>0.0D) z-=checkDelta;
         else z+=checkDelta;
       }
-      while (x!=0.0D&&z!=0.0D&&collidable.hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,x,-1.0D,z))){
+      while (x!=0.0D&&z!=0.0D&&!collidable.hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB.copyOffset(workingBoundingBox,player.boundingBox,x,-1.0D,z))){
         if (x<checkDelta&&x>=-checkDelta) x=0.0D;
         else if (x>0.0D) x-=checkDelta;
         else x+=checkDelta;
