@@ -1,4 +1,4 @@
-package minecraft_zigzag_1_8_9;
+package minecraft_autotas;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

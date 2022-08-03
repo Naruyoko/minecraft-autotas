@@ -1,4 +1,4 @@
-package minecraft_zigzag_1_8_9;
+package minecraft_autotas;
 
 import minecraft_simulator.v1_8_9.block.Blocks;
 import minecraft_simulator.v1_8_9.util.MathHelper;
