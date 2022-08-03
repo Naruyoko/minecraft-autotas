@@ -1,8 +1,8 @@
 package minecraft_zigzag_1_8_9;
 
-import minecraft_simulator.v1_8_9.Blocks;
-import minecraft_simulator.v1_8_9.MathHelper;
-import minecraft_simulator.v1_8_9.SprintingClearStoneXZPlayer;
+import minecraft_simulator.v1_8_9.block.Blocks;
+import minecraft_simulator.v1_8_9.util.MathHelper;
+import minecraft_simulator.v1_8_9.player.SprintingClearStoneXZPlayer;
 
 public class LongSmallZigzagJudge extends SmallZigzagJudge {
   public static final boolean[] pathShape=new boolean[]{

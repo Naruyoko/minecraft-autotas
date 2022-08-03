@@ -13,8 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import minecraft_simulator.v1_8_9.SprintingClearStoneXZPlayer;
-import minecraft_simulator.v1_8_9.Utility;
+import minecraft_simulator.v1_8_9.player.SprintingClearStoneXZPlayer;
+import minecraft_simulator.v1_8_9.util.Utility;
 
 public class BeamSearchConcurrent {
   public static final int maximumMovementPerTick=1500;

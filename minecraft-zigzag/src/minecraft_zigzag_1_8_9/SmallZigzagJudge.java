@@ -1,9 +1,9 @@
 package minecraft_zigzag_1_8_9;
 
-import minecraft_simulator.v1_8_9.Blocks;
-import minecraft_simulator.v1_8_9.MathHelper;
-import minecraft_simulator.v1_8_9.XZAxisAlignedBB;
-import minecraft_simulator.v1_8_9.SprintingClearStoneXZPlayer;
+import minecraft_simulator.v1_8_9.block.Blocks;
+import minecraft_simulator.v1_8_9.util.MathHelper;
+import minecraft_simulator.v1_8_9.collision.XZAxisAlignedBB;
+import minecraft_simulator.v1_8_9.player.SprintingClearStoneXZPlayer;
 
 public class SmallZigzagJudge implements IJudge {
   public static final SprintingClearStoneXZPlayer startingState=new SprintingClearStoneXZPlayer(-0.5,0.5,0,0,0);
