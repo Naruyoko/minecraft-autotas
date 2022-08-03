@@ -96,6 +96,7 @@ public class StoneXZPlayer extends AbstractXZPlayer {
   public static final double sprintingMovementSpeedDouble=baseMovementSpeedDouble*(1.0D+sprintingSpeedBoostModifier);
   // {net.minecraft.entity.EntityLivingBase.moveEntityWithHeading(float, float)}
   private static final float blockFrictionFactor=slipperinessDefault*0.91F;
+  private static final double groundFriction=(double)blockFrictionFactor;
   private static final float friction_intermediate=0.16277136F/(blockFrictionFactor*blockFrictionFactor*blockFrictionFactor);
   public static final float frictionBase=((float)baseMovementSpeedDouble)*friction_intermediate;
   public static final float frictionSprinting=((float)sprintingMovementSpeedDouble)*friction_intermediate;
@@ -157,8 +158,8 @@ public class StoneXZPlayer extends AbstractXZPlayer {
     isCollidedVertically=flagsOut.isCollidedVertically;
     isCollided=flagsOut.isCollided;
     onGround=flagsOut.onGround;
-    velX*=(double)blockFrictionFactor;
-    velZ*=(double)blockFrictionFactor;
+    velX*=groundFriction;
+    velZ*=groundFriction;
     // Return from moveEntityWithHeading
     // Return from (EntityLivingBase) onLivingUpdate
     // Return from (EntityPlayer) onLivingUpdate
