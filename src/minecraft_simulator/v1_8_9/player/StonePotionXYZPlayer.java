@@ -17,6 +17,9 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
   public int speedEffectAmplifier = 0;
   public boolean hasSlownessEffect = false;
   public int slownessEffectAmplifier = 0;
+  public double cachedMovementSpeedDouble = baseMovementSpeedDouble;
+  public float cachedMovementSpeedFloat = (float)cachedMovementSpeedDouble;
+  public float cachedFriction = cachedMovementSpeedFloat * friction_intermediate;
   public boolean isCollidedHorizontally = false; // {net.minecraft.entity.Entity.isCollidedHorizontally}
   public boolean isCollidedVertically; // {net.minecraft.entity.Entity.isCollidedVertically}
   public boolean isCollided; // {net.minecraft.entity.Entity.isCollided}
@@ -69,6 +72,9 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
     target.speedEffectAmplifier = source.speedEffectAmplifier;
     target.hasSlownessEffect = source.hasSlownessEffect;
     target.slownessEffectAmplifier = source.slownessEffectAmplifier;
+    target.cachedMovementSpeedDouble = source.cachedMovementSpeedDouble;
+    target.cachedMovementSpeedFloat = source.cachedMovementSpeedFloat;
+    target.cachedFriction = source.cachedFriction;
     target.isCollidedHorizontally = source.isCollidedHorizontally;
     target.isCollidedVertically = source.isCollidedVertically;
     target.isCollided = source.isCollided;
@@ -132,10 +138,6 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
   // {net.minecraft.potion.PospeedInAir =moveSlowdown}
   public static final double slownessEffectModifier = -0.15000000596046448D;
   public static final double baseMovementSpeedDouble = 0.10000000149011612D;
-  // {net.minecraft.entity.player.EntityPlayer.applyEntityAttributes()}
-  public double cachedMovementSpeedDouble = baseMovementSpeedDouble;
-  public float cachedMovementSpeedFloat = (float)cachedMovementSpeedDouble;
-  public float cachedFriction = cachedMovementSpeedFloat * friction_intermediate;
 
   /**
    * See {net.minecraft.entity.player.EntityPlayer.getAIMoveSpeed()} and
