@@ -60,8 +60,10 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
 
   @Override
   public StonePotionXYZPlayer clone() {
-    return new StonePotionXYZPlayer(boundingBox.clone(), posX, posY, posZ, velX, velY, velZ, yaw, flagsIn.checkSneaking,
-        flagsIn.checkStepping);
+    StonePotionXYZPlayer other = new StonePotionXYZPlayer(boundingBox.clone(), posX, posY, posZ, velX, velY, velZ, yaw,
+        flagsIn.checkSneaking, flagsIn.checkStepping);
+    copy(other, this);
+    return other;
   }
 
   public static void copy(StonePotionXYZPlayer target, StonePotionXYZPlayer source) {
