@@ -45,8 +45,34 @@ public class Block {
       list.add(bb);
   }
 
+  public void addCollisionBoxFromBoundsToList(int x, int z, double minX, double minZ, double maxX, double maxZ,
+      XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
+    XZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, z, minX, minZ, maxX, maxZ);
+    if (bb != null && mask.intersectsHorizontallyWith(bb))
+      list.add(bb);
+  }
+
+  public void addCollisionBoxFromBoundsToList(int x, int z, float minX, float minZ, float maxX, float maxZ,
+      XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
+    XZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, z, minX, minZ, maxX, maxZ);
+    if (bb != null && mask.intersectsHorizontallyWith(bb))
+      list.add(bb);
+  }
+
   public boolean hasAnyCollidingBoundingBoxes(int x, int z, XZAxisAlignedBB mask) {
     XZAxisAlignedBB bb = getCollisionBoundingBox(x, z);
+    return bb != null && mask.intersectsHorizontallyWith(bb);
+  }
+
+  public boolean isCollidingBoxFromBounds(int x, int z, double minX, double minZ, double maxX, double maxZ,
+      XZAxisAlignedBB mask) {
+    XZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, z, minX, minZ, maxX, maxZ);
+    return bb != null && mask.intersectsHorizontallyWith(bb);
+  }
+
+  public boolean isCollidingBoxFromBounds(int x, int z, float minX, float minZ, float maxX, float maxZ,
+      XZAxisAlignedBB mask) {
+    XZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, z, minX, minZ, maxX, maxZ);
     return bb != null && mask.intersectsHorizontallyWith(bb);
   }
 
@@ -56,6 +82,17 @@ public class Block {
    */
   public XZAxisAlignedBB getCollisionBoundingBox(int x, int z) {
     return new XZAxisAlignedBB((double)x + minX, (double)z + minZ, (double)x + maxX, (double)z + maxZ);
+  }
+
+  public XZAxisAlignedBB getCollisionBoundingBoxFromBounds(int x, int z, double minX, double minZ, double maxX,
+      double maxZ) {
+    return new XZAxisAlignedBB((double)x + minX, (double)z + minZ, (double)x + maxX, (double)z + maxZ);
+  }
+
+  public XZAxisAlignedBB getCollisionBoundingBoxFromBounds(int x, int z, float minX, float minZ, float maxX,
+      float maxZ) {
+    return new XZAxisAlignedBB((double)x + (double)minX, (double)z + (double)minZ, (double)x + (double)maxX,
+        (double)z + (double)maxZ);
   }
 
   public void addCollisionBoxesToListAsFloor(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
@@ -88,8 +125,34 @@ public class Block {
       list.add(bb);
   }
 
+  public void addCollisionBoxFromBoundsToList(int x, int y, int z, double minX, double minY, double minZ, double maxX,
+      double maxY, double maxZ, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+    XYZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, y, z, minX, minY, minZ, maxX, maxY, maxZ);
+    if (bb != null && mask.intersectsWith(bb))
+      list.add(bb);
+  }
+
+  public void addCollisionBoxFromBoundsToList(int x, int y, int z, float minX, float minY, float minZ, float maxX,
+      float maxY, float maxZ, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+    XYZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, y, z, minX, minY, minZ, maxX, maxY, maxZ);
+    if (bb != null && mask.intersectsWith(bb))
+      list.add(bb);
+  }
+
   public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
     XYZAxisAlignedBB bb = getCollisionBoundingBox(x, y, z);
+    return bb != null && mask.intersectsWith(bb);
+  }
+
+  public boolean isCollidingBoxFromBounds(int x, int y, int z, double minX, double minY, double minZ, double maxX,
+      double maxY, double maxZ, XYZAxisAlignedBB mask) {
+    XYZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, y, z, minX, minY, minZ, maxX, maxY, maxZ);
+    return bb != null && mask.intersectsWith(bb);
+  }
+
+  public boolean isCollidingBoxFromBounds(int x, int y, int z, float minX, float minY, float minZ, float maxX,
+      float maxY, float maxZ, XYZAxisAlignedBB mask) {
+    XYZAxisAlignedBB bb = getCollisionBoundingBoxFromBounds(x, y, z, minX, minY, minZ, maxX, maxY, maxZ);
     return bb != null && mask.intersectsWith(bb);
   }
 
@@ -100,6 +163,18 @@ public class Block {
   public XYZAxisAlignedBB getCollisionBoundingBox(int x, int y, int z) {
     return new XYZAxisAlignedBB((double)x + minX, (double)y + minY, (double)z + minZ, (double)x + maxX,
         (double)y + maxY, (double)z + maxZ);
+  }
+
+  public XYZAxisAlignedBB getCollisionBoundingBoxFromBounds(int x, int y, int z, double minX, double minY, double minZ,
+      double maxX, double maxY, double maxZ) {
+    return new XYZAxisAlignedBB((double)x + minX, (double)y + minY, (double)z + minZ, (double)x + maxX,
+        (double)y + maxY, (double)z + maxZ);
+  }
+
+  public XYZAxisAlignedBB getCollisionBoundingBoxFromBounds(int x, int y, int z, float minX, float minY, float minZ,
+      float maxX, float maxY, float maxZ) {
+    return new XYZAxisAlignedBB((double)x + (double)minX, (double)y + (double)minY, (double)z + (double)minZ,
+        (double)x + (double)maxX, (double)y + (double)maxY, (double)z + (double)maxZ);
   }
 
   /**

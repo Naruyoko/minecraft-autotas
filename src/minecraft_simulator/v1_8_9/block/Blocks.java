@@ -53,89 +53,49 @@ public class Blocks {
     @Override
     public void addCollisionBoxesToListAsFloor(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
       final float thickness = 0.125F;
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F);
-      super.addCollisionBoxesToList(x, z, mask, list);
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness);
-      super.addCollisionBoxesToList(x, z, mask, list);
-      this.setBlockBounds(1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-      super.addCollisionBoxesToList(x, z, mask, list);
-      this.setBlockBounds(0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F);
-      super.addCollisionBoxesToList(x, z, mask, list);
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      addCollisionBoxFromBoundsToList(x, z, 0.0F, 0.0F, thickness, 1.0F, mask, list);
+      addCollisionBoxFromBoundsToList(x, z, 0.0F, 0.0F, 1.0F, thickness, mask, list);
+      addCollisionBoxFromBoundsToList(x, z, 1.0F - thickness, 0.0F, 1.0F, 1.0F, mask, list);
+      addCollisionBoxFromBoundsToList(x, z, 0.0F, 1.0F - thickness, 1.0F, 1.0F, mask, list);
     }
 
     @Override
     public boolean hasAnyCollidingBoundingBoxesAsFloor(int x, int z, XZAxisAlignedBB mask) {
       final float thickness = 0.125F;
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F);
-      if (super.hasAnyCollidingBoundingBoxes(x, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, z, 0.0F, 0.0F, thickness, 1.0F, mask))
         return true;
-      }
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness);
-      if (super.hasAnyCollidingBoundingBoxes(x, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, z, 0.0F, 0.0F, 1.0F, thickness, mask))
         return true;
-      }
-      this.setBlockBounds(1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-      if (super.hasAnyCollidingBoundingBoxes(x, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, z, 1.0F - thickness, 0.0F, 1.0F, 1.0F, mask))
         return true;
-      }
-      this.setBlockBounds(0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F);
-      if (super.hasAnyCollidingBoundingBoxes(x, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, z, 0.0F, 1.0F - thickness, 1.0F, 1.0F, mask))
         return true;
-      }
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
       return false;
     }
 
     @Override
     public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F);
-      super.addCollisionBoxesToList(x, y, z, mask, list);
+      addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F, mask, list);
       final float thickness = 0.125F;
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F);
-      super.addCollisionBoxesToList(x, y, z, mask, list);
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness);
-      super.addCollisionBoxesToList(x, y, z, mask, list);
-      this.setBlockBounds(1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-      super.addCollisionBoxesToList(x, y, z, mask, list);
-      this.setBlockBounds(0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F);
-      super.addCollisionBoxesToList(x, y, z, mask, list);
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F, mask, list);
+      addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness, mask, list);
+      addCollisionBoxFromBoundsToList(x, y, z, 1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, mask, list);
+      addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F, mask, list);
     }
 
     @Override
     public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F);
-      if (super.hasAnyCollidingBoundingBoxes(x, y, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F, mask))
         return true;
-      }
       final float thickness = 0.125F;
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F);
-      if (super.hasAnyCollidingBoundingBoxes(x, y, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F, mask))
         return true;
-      }
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness);
-      if (super.hasAnyCollidingBoundingBoxes(x, y, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness, mask))
         return true;
-      }
-      this.setBlockBounds(1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-      if (super.hasAnyCollidingBoundingBoxes(x, y, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, y, z, 1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, mask))
         return true;
-      }
-      this.setBlockBounds(0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F);
-      if (super.hasAnyCollidingBoundingBoxes(x, y, z, mask)) {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F, mask))
         return true;
-      }
-      this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
       return false;
     }
   };
