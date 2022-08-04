@@ -9,14 +9,24 @@ import minecraft_simulator.v1_8_9.world.SimulationFlagsIn;
 import minecraft_simulator.v1_8_9.world.SimulationFlagsOut;
 
 public class Block {
-  public final double minX;
-  public final double minY;
-  public final double minZ;
-  public final double maxX;
-  public final double maxY;
-  public final double maxZ;
+  public double minX;
+  public double minY;
+  public double minZ;
+  public double maxX;
+  public double maxY;
+  public double maxZ;
 
   public Block(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+    setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
+  }
+
+  public Block() { this(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F); }
+
+  /**
+   * See {net.minecraft.block.Block.setBlockBounds(float, float, float, float,
+   * float, float)}
+   */
+  public void setBlockBounds(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
     this.minX = (double)minX;
     this.minY = (double)minY;
     this.minZ = (double)minZ;
@@ -48,15 +58,22 @@ public class Block {
     return new XZAxisAlignedBB((double)x + minX, (double)z + minZ, (double)x + maxX, (double)z + maxZ);
   }
 
-  //? is this needed
   public void addCollisionBoxesToListAsFloor(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
     addCollisionBoxesToList(x, z, mask, list);
+  }
+
+  public boolean hasAnyCollidingBoundingBoxesAsFloor(int x, int z, XZAxisAlignedBB mask) {
+    return hasAnyCollidingBoundingBoxes(x, z, mask);
   }
 
   public XZAxisAlignedBB getCollisionBoundingBoxAsFloor(int x, int z) { return getCollisionBoundingBox(x, z); }
 
   public void addCollisionBoxesToListAsCeiling(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
     addCollisionBoxesToList(x, z, mask, list);
+  }
+
+  public boolean hasAnyCollidingBoundingBoxesAsCeiling(int x, int z, XZAxisAlignedBB mask) {
+    return hasAnyCollidingBoundingBoxes(x, z, mask);
   }
 
   public XZAxisAlignedBB getCollisionBoundingBoxAsCeiling(int x, int z) { return getCollisionBoundingBox(x, z); }
