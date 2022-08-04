@@ -7,7 +7,7 @@ import minecraft_simulator.v1_8_9.util.Utility;
 /**
  * Simulates the player movement assuming with following restrictions: - Always
  * sprinting - No block interactions - Assumed to be on ground with normal
- * slipperiness - No falling (XZ-only)
+ * slipperiness - No falling (XZ-only) - No status effects
  */
 public class SprintingClearStoneXZPlayer extends AbstractXZPlayer {
   public SprintingClearStoneXZPlayer(XZAxisAlignedBB boundingBox, double posX, double posZ, double velX, double velZ,

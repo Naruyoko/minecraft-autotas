@@ -9,7 +9,7 @@ import minecraft_simulator.v1_8_9.world.SimulationFlagsOut;
 /**
  * Simulates the player movement assuming with following restrictions: - Always
  * sprinting - No sneaking - Assumed to be on ground with normal slipperiness -
- * No falling (XZ-only)
+ * No falling (XZ-only) - No status effects
  */
 public class SprintingStoneXZPlayer extends AbstractXZPlayer {
   public final SimulationFlagsIn flagsIn = new SimulationFlagsIn();

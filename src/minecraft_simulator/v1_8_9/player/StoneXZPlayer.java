@@ -8,7 +8,8 @@ import minecraft_simulator.v1_8_9.world.SimulationFlagsOut;
 
 /**
  * Simulates the player movement assuming with following restrictions: - Assumed
- * to be on ground with normal slipperiness - No falling (XZ-only)
+ * to be on ground with normal slipperiness and not in liquids or ladder - No
+ * falling (XZ-only) - No status effects
  */
 public class StoneXZPlayer extends AbstractXZPlayer {
   public int sprintingTicksLeft = 0; // {net.minecraft.client.entity.EntityPlayerSP.sprintingTicksLeft}
