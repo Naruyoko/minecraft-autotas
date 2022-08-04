@@ -164,10 +164,8 @@ public class Blocks {
   // See {net.minecraft.block.BlockSoulSand}
   public static final Block soulsand = new Block() {
     @Override
-    public XYZAxisAlignedBB getCollisionBoundingBox(int x, int z) {
-      final float missing = 0.125F;
-      return new XYZAxisAlignedBB((double)x, (double)y, (double)z, (double)(x + 1), (double)((float)(y + 1) - missing),
-          (double)(z + 1));
+    public XZAxisAlignedBB getCollisionBoundingBox(int x, int z) {
+      return new XZAxisAlignedBB((double)x, (double)z, (double)(x + 1), (double)(z + 1));
     }
 
     @Override
