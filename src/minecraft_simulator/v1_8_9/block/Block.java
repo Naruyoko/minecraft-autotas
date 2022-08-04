@@ -4,6 +4,9 @@ import java.util.List;
 
 import minecraft_simulator.v1_8_9.collision.XYZAxisAlignedBB;
 import minecraft_simulator.v1_8_9.collision.XZAxisAlignedBB;
+import minecraft_simulator.v1_8_9.player.AbstractXYZPlayer;
+import minecraft_simulator.v1_8_9.world.SimulationFlagsIn;
+import minecraft_simulator.v1_8_9.world.SimulationFlagsOut;
 
 public class Block {
   public final double minX;
@@ -81,4 +84,37 @@ public class Block {
     return new XYZAxisAlignedBB((double)x + minX, (double)y + minY, (double)z + minZ, (double)x + maxX,
         (double)y + maxY, (double)z + maxZ);
   }
+
+  /**
+   * See {net.minecraft.block.BlockSlime.onLanded(World, Entity)}
+   * 
+   * @param player
+   * @param flagsIn
+   * @param flagsOut
+   */
+  public void onLanded(AbstractXYZPlayer player, SimulationFlagsIn flagsIn, SimulationFlagsOut flagsOut) {
+    player.velY = 0.0D;
+  }
+
+  /**
+   * See {net.minecraft.block.Block.onEntityCollidedWithBlock(World, BlockPos,
+   * Entity)}
+   * 
+   * @param player
+   * @param flagsIn
+   * @param flagsOut
+   */
+  public void onEntityCollidedWithBlockGround(AbstractXYZPlayer player, SimulationFlagsIn flagsIn,
+      SimulationFlagsOut flagsOut) {}
+
+  /**
+   * See {net.minecraft.block.Block.onEntityCollidedWithBlock(World, BlockPos,
+   * IBlockState, Entity)}
+   * 
+   * @param player
+   * @param flagsIn
+   * @param flagsOut
+   */
+  public void onEntityCollidedWithBlockIntersect(AbstractXYZPlayer player, SimulationFlagsIn flagsIn,
+      SimulationFlagsOut flagsOut) {}
 }

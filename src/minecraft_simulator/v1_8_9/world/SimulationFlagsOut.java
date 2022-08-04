@@ -5,4 +5,5 @@ public class SimulationFlagsOut {
   public boolean isCollidedVertically;
   public boolean onGround;
   public boolean isCollided;
+  public boolean isInWeb;
 }
