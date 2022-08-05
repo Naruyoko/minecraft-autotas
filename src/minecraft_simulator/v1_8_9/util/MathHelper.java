@@ -17,6 +17,8 @@ public class MathHelper {
 
   public static float cos(float value) { return SIN_TABLE[(int)(value * 10430.378F + 16384F) & 65535]; }
 
+  public static float sqrt_double(double value) { return (float)Math.sqrt(value); }
+
   public static float sqrt_float(float value) { return (float)Math.sqrt((double)value); }
 
   public static int floor_double(double value) {
