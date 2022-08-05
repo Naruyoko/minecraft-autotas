@@ -13,6 +13,7 @@ public abstract class AbstractXYZPlayer extends AbstractXZPlayer {
   public AbstractXYZPlayer(XYZAxisAlignedBB boundingBox, double posX, double posY, double posZ, double velX,
       double velY, double velZ, float yaw) {
     super(boundingBox, posX, posZ, velX, velZ, yaw);
+    this.boundingBox = boundingBox;
     this.posY = posY;
     this.velY = velY;
   }
