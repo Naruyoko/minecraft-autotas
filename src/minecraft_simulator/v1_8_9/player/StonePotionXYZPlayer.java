@@ -17,6 +17,8 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
   public int speedEffectAmplifier = 0;
   public boolean hasSlownessEffect = false;
   public int slownessEffectAmplifier = 0;
+  public boolean hasJumpBoostEffect = false;
+  public int jumpBoostEffectAmplifier = 0;
   public double cachedMovementSpeedDouble = baseMovementSpeedDouble;
   public float cachedMovementSpeedFloat = (float)cachedMovementSpeedDouble;
   public float cachedFriction = cachedMovementSpeedFloat * friction_intermediate;
@@ -74,6 +76,8 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
     target.speedEffectAmplifier = source.speedEffectAmplifier;
     target.hasSlownessEffect = source.hasSlownessEffect;
     target.slownessEffectAmplifier = source.slownessEffectAmplifier;
+    target.hasJumpBoostEffect = source.hasJumpBoostEffect;
+    target.jumpBoostEffectAmplifier = source.jumpBoostEffectAmplifier;
     target.cachedMovementSpeedDouble = source.cachedMovementSpeedDouble;
     target.cachedMovementSpeedFloat = source.cachedMovementSpeedFloat;
     target.cachedFriction = source.cachedFriction;
@@ -223,6 +227,8 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
     // Call to {net.minecraft.entity.player.EntityPlayer.jump()} if jumping
     if (jumpedLast) {
       velY = jumpUpwardsMotionDouble;
+      if (hasJumpBoostEffect)
+        velY += (double)((float)(jumpBoostEffectAmplifier + 1) * 0.1F);
       if (isSprinting) {
         final float yawRad = yaw * 0.017453292F;
         velX -= (double)(MathHelper.sin(yawRad) * 0.2F);
