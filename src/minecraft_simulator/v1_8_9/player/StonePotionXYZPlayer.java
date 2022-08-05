@@ -154,16 +154,17 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
   /**
    * See {net.minecraft.entity.player.EntityPlayer.getAIMoveSpeed()} and
    * {net.minecraft.entity.ai.attributes.ModifiableAttributeInstance.computeValue()}
-   * Note: This may be indeterministic in the game due to iteration over HashSet
+   * Note: This is ordered as would be using OpenJDK. Because of how HashMap is
+   * iterated, we always get the order of slowness, sprinting, then speed.
    */
   public void recalculateMovementSpeed() {
     cachedMovementSpeedDouble = baseMovementSpeedDouble;
+    if (hasSlownessEffect)
+      cachedMovementSpeedDouble *= 1.0D + slownessEffectModifier * (double)(slownessEffectAmplifier + 1);
     if (isSprinting)
       cachedMovementSpeedDouble *= 1.0D + sprintingSpeedBoostModifier;
     if (hasSpeedEffect)
       cachedMovementSpeedDouble *= 1.0D + speedEffectModifier * (double)(speedEffectAmplifier + 1);
-    if (hasSlownessEffect)
-      cachedMovementSpeedDouble *= 1.0D + slownessEffectModifier * (double)(slownessEffectAmplifier + 1);
     cachedMovementSpeedFloat = (float)cachedMovementSpeedDouble;
     cachedFriction = cachedMovementSpeedFloat * friction_intermediate;
   }
