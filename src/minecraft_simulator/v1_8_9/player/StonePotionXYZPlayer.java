@@ -135,6 +135,12 @@ public class StonePotionXYZPlayer extends AbstractXYZPlayer {
     recalculateMovementSpeed();
   }
 
+  public void setJumpBoostEffect(boolean grant, int amplifier) {
+    hasJumpBoostEffect = grant;
+    jumpBoostEffectAmplifier = amplifier;
+    recalculateMovementSpeed();
+  }
+
   // See https://www.mcpk.wiki/wiki/45_Strafe and {net.minecraft.entity.EntityLivingBase.onLivingUpdate()}
   // {net.minecraft.entity.player.EntityPlayer.applyEntityAttributes()}
   // {net.minecraft.entity.EntityLivingBase.setSprinting(boolean)} {net.minecraft.entity.EntityLivingBase.sprintingSpeedBoostModifier}
