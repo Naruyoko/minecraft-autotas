@@ -452,6 +452,11 @@ public class Blocks {
       return false;
     }
   };
+  // See {net.minecraft.block.BlockIce}
+  public static final Block ice = new Block();
+  static {
+    ice.setSlipperiness(0.98F);
+  }
 
   // See {net.minecraft.block.BlockLadder}
   public static Block ladder(EnumFacing facing) {
@@ -504,6 +509,9 @@ public class Blocks {
       super.onEntityCollidedWithBlockGround(player, flagsIn, flagsOut);
     }
   };
+  static {
+    slime.setSlipperiness(0.8F);
+  }
   // See {net.minecraft.block.BlockLilyPad}
   public static final Block lilyPad;
   static {

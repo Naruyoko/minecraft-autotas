@@ -15,9 +15,14 @@ public class Block {
   public double maxX;
   public double maxY;
   public double maxZ;
+  public float slipperiness; // {net.minecraft.block.Block.slipperiness}
+  public float blockFrictionFactor;
+  public double groundFriction;
+  public float friction_intermediate;
 
   public Block(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
     setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
+    setSlipperiness(0.6F);
   }
 
   public Block() { this(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F); }
@@ -33,6 +38,17 @@ public class Block {
     this.maxX = (double)maxX;
     this.maxY = (double)maxY;
     this.maxZ = (double)maxZ;
+  }
+
+  /**
+   * See {{net.minecraft.entity.EntityLivingBase.moveEntityWithHeading(float,
+   * float)}}
+   */
+  public void setSlipperiness(float slipperiness) {
+    this.slipperiness = slipperiness;
+    blockFrictionFactor = slipperiness * 0.91F;
+    groundFriction = (double)blockFrictionFactor;
+    friction_intermediate = 0.16277136F / (blockFrictionFactor * blockFrictionFactor * blockFrictionFactor);
   }
 
   /**
