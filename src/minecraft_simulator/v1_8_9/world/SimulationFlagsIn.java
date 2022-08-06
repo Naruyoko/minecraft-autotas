@@ -6,4 +6,12 @@ public class SimulationFlagsIn {
   public boolean isInWeb;
   public boolean checkSneaking = true;
   public boolean checkStepping = true;
+
+  public static void copy(SimulationFlagsIn target, SimulationFlagsIn source) {
+    target.onGround = source.onGround;
+    target.isSneaking = source.isSneaking;
+    target.isInWeb = source.isInWeb;
+    target.checkSneaking = source.checkSneaking;
+    target.checkStepping = source.checkStepping;
+  }
 }

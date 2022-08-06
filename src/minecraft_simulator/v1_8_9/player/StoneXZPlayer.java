@@ -67,8 +67,7 @@ public class StoneXZPlayer extends AbstractXZPlayer {
     target.onGround = source.onGround;
     target.mouseSensitivity = source.mouseSensitivity;
     target.mouseMult = source.mouseMult;
-    target.flagsIn.checkSneaking = source.flagsIn.checkSneaking;
-    target.flagsIn.checkSneaking = source.flagsIn.checkSneaking;
+    SimulationFlagsIn.copy(target.flagsIn, source.flagsIn);
   }
 
   // See https://www.mcpk.wiki/wiki/Mouse_Movement and {net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(float, long)}
