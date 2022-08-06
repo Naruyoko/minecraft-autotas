@@ -8,10 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-import minecraft_autotas.BeamSearchConcurrent;
-import minecraft_autotas.IJudge;
-import minecraft_autotas.Individual;
-import minecraft_autotas.LongSmallZigzagJudge;
+import minecraft_autotas.beam.BeamSearchConcurrent;
+import minecraft_autotas.beam.IJudge;
+import minecraft_autotas.beam.Individual;
+import minecraft_autotas.beam.LongSmallZigzagJudge;
 import minecraft_simulator.v1_8_9.player.SprintingClearStoneXZPlayer;
 import minecraft_simulator.v1_8_9.util.Utility;
 

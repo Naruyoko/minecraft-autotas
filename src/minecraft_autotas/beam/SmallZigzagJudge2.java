@@ -1,4 +1,4 @@
-package minecraft_autotas;
+package minecraft_autotas.beam;
 
 import minecraft_simulator.v1_8_9.util.MathHelper;
 import minecraft_simulator.v1_8_9.player.SprintingClearStoneXZPlayer;

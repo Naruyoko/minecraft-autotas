@@ -1,4 +1,4 @@
-package minecraft_autotas;
+package minecraft_autotas.beam;
 
 import java.util.Arrays;
 import java.util.PriorityQueue;
