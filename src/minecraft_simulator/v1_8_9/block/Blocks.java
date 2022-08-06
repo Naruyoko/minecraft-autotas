@@ -461,17 +461,20 @@ public class Blocks {
   // See {net.minecraft.block.BlockLadder}
   public static Block ladder(EnumFacing facing) {
     final float thickness = 0.125F;
+    Block block;
     switch (facing) {
     case NORTH:
-      return new Block(0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F);
+      block = new Block(0.0F, 0.0F, 1.0F - thickness, 1.0F, 1.0F, 1.0F);
     case SOUTH:
-      return new Block(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness);
+      block = new Block(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, thickness);
     case WEST:
-      return new Block(1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+      block = new Block(1.0F - thickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     case EAST:
     default:
-      return new Block(0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F);
+      block = new Block(0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F);
     }
+    block.isLadder = true;
+    return block;
   }
 
   public static final Block[] ladders = new Block[4];
@@ -616,6 +619,9 @@ public class Blocks {
   public static final Block trapDoorEast = new Block(0.0F, 0.0F, 0.0F, 0.1875F, 1.0F, 1.0F);
   // See {net.minecraft.block.BlockVine}
   public static final Block vine = new PassableBlock();
+  static {
+    vine.isLadder = true;
+  }
   // See {net.minecraft.block.BlockSoulSand}
   public static final Block soulsand = new Block() {
     @Override

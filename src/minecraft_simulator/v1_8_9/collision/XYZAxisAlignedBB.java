@@ -98,6 +98,121 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
   public XYZAxisAlignedBB addCoord(double x, double y, double z) { return this.clone().mutatingAddCoord(x, y, z); }
 
   /**
+   * In-place version of {net.minecraft.util.AxisAlignedBB.expand(double, double,
+   * double)}
+   * 
+   * @param x
+   * @param y
+   * @param z
+   */
+  public XYZAxisAlignedBB mutatingExpand(double x, double y, double z) {
+    this.minX = this.minX - x;
+    this.minY = this.minY - y;
+    this.minZ = this.minZ - z;
+    this.maxX = this.maxX + x;
+    this.maxY = this.maxY + y;
+    this.maxZ = this.maxZ + z;
+    return this;
+  }
+
+  public static XYZAxisAlignedBB copyExpand(XYZAxisAlignedBB target, XYZAxisAlignedBB source, double x, double y,
+      double z) {
+    return copy(target, source).mutatingExpand(x, y, z);
+  }
+
+  /**
+   * Out-place version of {net.minecraft.util.AxisAlignedBB.expand(double, double,
+   * double)}
+   * 
+   * @param x
+   * @param y
+   * @param z
+   */
+  public XYZAxisAlignedBB expand(double x, double y, double z) { return this.clone().mutatingAddCoord(x, y, z); }
+
+  /**
+   * In-place version of {net.minecraft.util.AxisAlignedBB.contract(double,
+   * double, double)}
+   * 
+   * @param x
+   * @param y
+   * @param z
+   */
+  public XYZAxisAlignedBB mutatingContract(double x, double y, double z) {
+    this.minX = this.minX + x;
+    this.minY = this.minY + y;
+    this.minZ = this.minZ + z;
+    this.maxX = this.maxX - x;
+    this.maxY = this.maxY - y;
+    this.maxZ = this.maxZ - z;
+    return this;
+  }
+
+  public static XYZAxisAlignedBB copyContract(XYZAxisAlignedBB target, XYZAxisAlignedBB source, double x, double y,
+      double z) {
+    return copy(target, source).mutatingContract(x, y, z);
+  }
+
+  /**
+   * Out-place version of {net.minecraft.util.AxisAlignedBB.contract(double,
+   * double, double)}
+   * 
+   * @param x
+   * @param y
+   * @param z
+   */
+  public XYZAxisAlignedBB contract(double x, double y, double z) { return this.clone().mutatingAddCoord(x, y, z); }
+
+  /**
+   * In-place version of {net.minecraft.util.AxisAlignedBB.expand(double, double,
+   * double)} then {net.minecraft.util.AxisAlignedBB.contract(double, double,
+   * double)}
+   * 
+   * @param x1
+   * @param y1
+   * @param z1
+   * @param x2
+   * @param y2
+   * @param z2
+   */
+  public XYZAxisAlignedBB mutatingExpandAndContract(double x1, double y1, double z1, double x2, double y2, double z2) {
+    this.minX = this.minX - x1;
+    this.minY = this.minY - y1;
+    this.minZ = this.minZ - z1;
+    this.maxX = this.maxX + x1;
+    this.maxY = this.maxY + y1;
+    this.maxZ = this.maxZ + z1;
+    this.minX = this.minX + x2;
+    this.minY = this.minY + y2;
+    this.minZ = this.minZ + z2;
+    this.maxX = this.maxX - x2;
+    this.maxY = this.maxY - y2;
+    this.maxZ = this.maxZ - z2;
+    return this;
+  }
+
+  public static XYZAxisAlignedBB copyExpandAndContract(XYZAxisAlignedBB target, XYZAxisAlignedBB source, double x1,
+      double y1, double z1, double x2, double y2, double z2) {
+    return copy(target, source).mutatingExpandAndContract(x1, y1, z1, x2, y2, z2);
+  }
+
+  /**
+   * Out-place version of {net.minecraft.util.AxisAlignedBB.expand(double, double,
+   * double)} then {net.minecraft.util.AxisAlignedBB.contract(double, double,
+   * double)}
+   * 
+   * @param x1
+   * @param y1
+   * @param z1
+   * @param x2
+   * @param y2
+   * @param z2
+   */
+  public XYZAxisAlignedBB expandAndContract(double x1, double y1, double z1, double x2, double y2, double z2) {
+    return this.clone().mutatingExpandAndContract(x1, y1, z1, x2, y2, z2);
+  }
+
+  /**
    * See {net.minecraft.util.AxisAlignedBB.calculateXOffset(AxisAlignedBB,
    * double)}
    * 

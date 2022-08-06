@@ -19,10 +19,12 @@ public class Block {
   public float blockFrictionFactor;
   public double groundFriction;
   public float friction_intermediate;
+  public boolean isLadder;
 
   public Block(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
     setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
     setSlipperiness(0.6F);
+    isLadder = false;
   }
 
   public Block() { this(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F); }

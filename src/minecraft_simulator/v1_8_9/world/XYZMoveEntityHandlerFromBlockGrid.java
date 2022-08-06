@@ -5,6 +5,7 @@ import java.util.List;
 import minecraft_simulator.v1_8_9.block.Block;
 import minecraft_simulator.v1_8_9.collision.XYZAxisAlignedBB;
 import minecraft_simulator.v1_8_9.player.AbstractXYZPlayer;
+import minecraft_simulator.v1_8_9.player.IPushedByWater;
 import minecraft_simulator.v1_8_9.util.MathHelper;
 
 /**
@@ -163,7 +164,9 @@ public class XYZMoveEntityHandlerFromBlockGrid implements IXYZMoveEntityHandler<
     flagsOut.isCollidedVertically = yNoBlock != y;
     flagsOut.onGround = flagsOut.isCollidedVertically && yNoBlock < 0.0D;
     flagsOut.isCollided = flagsOut.isCollidedHorizontally || flagsOut.isCollidedVertically;
-    //Call to {net.minecraft.entity.Entity.updateFallState(double, boolean, Block, BlockPos)}, ommited
+    //Call to {net.minecraft.entity.Entity.updateFallState(double, boolean, Block, BlockPos)}, eventually calling {net.minecraft.entity.Entity.handleWaterMovement()}
+    if (flagsIn.checkWater && !flagsIn.inWater)
+      ((IPushedByWater)player).handleWaterMovement(blockGrid);
     if (xNoBlock != x)
       player.velX = 0.0D;
     if (zNoBlock != z)
