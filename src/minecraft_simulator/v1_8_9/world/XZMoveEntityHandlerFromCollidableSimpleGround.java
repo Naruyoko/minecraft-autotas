@@ -60,11 +60,12 @@ public class XZMoveEntityHandlerFromCollidableSimpleGround implements IXZMoveEnt
           z += checkDelta;
       }
     }
+    final XZAxisAlignedBB boundingBoxBefore = player.boundingBox.clone();
     player.boundingBox.mutatingOffset(x, z);
     player.resetPositionToBB();
     flagsOut.isCollidedHorizontally = false;
     flagsOut.isCollidedVertically = ground.hasAnyHorizontallyCollidingBoundingBoxes(
-        XZAxisAlignedBB.copyAddCoord(workingBoundingBox, player.boundingBox, x, z));
+        XZAxisAlignedBB.copyAddCoord(workingBoundingBox, boundingBoxBefore, x, z));
     flagsOut.onGround = flagsOut.isCollidedVertically;
     flagsOut.isCollided = flagsOut.isCollidedHorizontally || flagsOut.isCollidedVertically;
     //Call to {net.minecraft.entity.Entity.updateFallState(double, boolean, Block, BlockPos)}, ommited

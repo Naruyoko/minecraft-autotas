@@ -151,6 +151,7 @@ public abstract class AbstractXZStoneGroundAndWall implements IXZMoveEntityHandl
     }
     final double xNoBlock = x;
     final double zNoBlock = z;
+    final XZAxisAlignedBB boundingBoxBefore = player.boundingBox.clone();
     List<XZAxisAlignedBB> collidingBoundingBoxes = getHorizontallyCollidingWallBoundingBoxes(
         XZAxisAlignedBB.copyAddCoord(workingBoundingBox, player.boundingBox, x, z));
     for (XZAxisAlignedBB blockBoundingBox : collidingBoundingBoxes) {
@@ -164,7 +165,7 @@ public abstract class AbstractXZStoneGroundAndWall implements IXZMoveEntityHandl
     player.resetPositionToBB();
     flagsOut.isCollidedHorizontally = xNoBlock != x || zNoBlock != z;
     flagsOut.isCollidedVertically = hasAnyHorizontallyCollidingGroundBoundingBoxes(
-        XZAxisAlignedBB.copyAddCoord(workingBoundingBox, player.boundingBox, xNoBlock, zNoBlock));
+        XZAxisAlignedBB.copyAddCoord(workingBoundingBox, boundingBoxBefore, xNoBlock, zNoBlock));
     flagsOut.onGround = flagsOut.isCollidedVertically;
     flagsOut.isCollided = flagsOut.isCollidedHorizontally || flagsOut.isCollidedVertically;
     //Call to {net.minecraft.entity.Entity.updateFallState(double, boolean, Block, BlockPos)}, ommited
