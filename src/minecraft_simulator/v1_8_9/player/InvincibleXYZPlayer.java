@@ -257,6 +257,95 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
   }
 
   /**
+   * See {net.minecraft.entity.Entity.isInLava()}
+   */
+  private boolean isInLava(AbstractXYZBlockGrid blockGrid) {
+    final XYZAxisAlignedBB bb = boundingBox.expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D);
+    final int minX = MathHelper.floor_double(bb.minX);
+    final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
+    final int minY = MathHelper.floor_double(bb.minY);
+    final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
+    final int minZ = MathHelper.floor_double(bb.minZ);
+    final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+    for (int x = minX; x < maxX; x++) {
+      for (int y = minY; y < maxY; y++) {
+        for (int z = minZ; z < maxZ; z++) {
+          Block block = blockGrid.getBlockAt(x, y, z);
+          if (block instanceof BlockLiquid && ((BlockLiquid)block).isLava)
+            return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * See {net.minecraft.entity.Entity.isOffsetPositionInLiquid(double, double,
+   * double)}
+   */
+  private boolean isOffsetPositionInLiquid(AbstractXYZBlockGrid blockGrid, double offsetX, double offsetY,
+      double offsetZ) {
+    final XYZAxisAlignedBB bb = boundingBox.offset(offsetX, offsetY, offsetZ);
+    if (!blockGrid.hasAnyCollidingBoundingBoxes(bb)) {
+      final int minX = MathHelper.floor_double(bb.minX);
+      final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
+      final int minY = MathHelper.floor_double(bb.minY);
+      final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
+      final int minZ = MathHelper.floor_double(bb.minZ);
+      final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+      for (int x = minX; x < maxX; x++) {
+        for (int y = minY; y < maxY; y++) {
+          for (int z = minZ; z < maxZ; z++) {
+            if (blockGrid.getBlockAt(x, y, z) instanceof BlockLiquid)
+              return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * See {net.minecraft.entity.EntityLivingBase.isOnLadder()}
+   */
+  private boolean isOnLadder(AbstractXYZBlockGrid blockGrid) {
+    final XYZAxisAlignedBB bb = boundingBox;
+    final int minX = MathHelper.floor_double(bb.minX);
+    final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
+    final int minY = MathHelper.floor_double(bb.minY);
+    final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
+    final int minZ = MathHelper.floor_double(bb.minZ);
+    final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+    for (int x = minX; x < maxX; x++) {
+      for (int y = minY; y < maxY; y++) {
+        for (int z = minZ; z < maxZ; z++) {
+          if (blockGrid.getBlockAt(x, y, z).isLadder)
+            return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Calls {net.minecraft.entity.Entity.moveEntity(double, double, double)} while
+   * setting and retrieving some flags
+   * 
+   * @param moveEntityHandler
+   * @param keySneak
+   */
+  private void moveEntity(final XYZMoveEntityHandlerFromBlockGrid moveEntityHandler, final boolean keySneak) {
+    flagsIn.onGround = onGround;
+    flagsIn.isSneaking = keySneak;
+    flagsIn.inWater = inWater;
+    moveEntityHandler.moveEntity(this, velX, velY, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
+    isCollidedHorizontally = flagsOut.isCollidedHorizontally;
+    isCollidedVertically = flagsOut.isCollidedVertically;
+    isCollided = flagsOut.isCollided;
+    onGround = flagsOut.onGround;
+  }
+
+  /**
    * Simulate 1 tick of horizontal movement. See
    * {net.minecraft.client.entity.EntityPlayerSP.onUpdate()} See
    * {net.minecraft.util.MovementInputFromOptions.updatePlayerMoveState()} and
@@ -299,26 +388,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
       this.velY = 0.0D;
     if (Math.abs(this.velZ) < 0.005D)
       this.velZ = 0.0D;
-    boolean isInLava = false;
-    if (!inWater) { // Only check whether in lava once if not in water, see {net.minecraft.entity.Entity.isInLava()}
-      final XYZAxisAlignedBB bb = boundingBox.expand(-0.10000000149011612D, -0.4000000059604645D,
-          -0.10000000149011612D);
-      final int minX = MathHelper.floor_double(bb.minX);
-      final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-      final int minY = MathHelper.floor_double(bb.minY);
-      final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-      final int minZ = MathHelper.floor_double(bb.minZ);
-      final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
-      for (int x = minX; !isInLava && x < maxX; x++) {
-        for (int y = minY; !isInLava && y < maxY; y++) {
-          for (int z = minZ; !isInLava && z < maxZ; z++) {
-            Block block = blockGrid.getBlockAt(x, y, z);
-            if (block instanceof BlockLiquid && ((BlockLiquid)block).isLava)
-              isInLava = true;
-          }
-        }
-      }
-    }
+    final boolean isInLava = !inWater && isInLava(blockGrid); // Only check whether in lava once if not in water
     if (keyJump) {
       if (inWater) { // {net.minecraft.entity.Entity.isInWater()}
         velY += 0.03999999910593033D; // {net.minecraft.entity.EntityLivingBase.updateAITick()}
@@ -368,44 +438,14 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
         velX += (double)(strafe * cosYaw - forward * sinYaw);
         velZ += (double)(forward * cosYaw + strafe * sinYaw);
       }
-      // Return from moveFlying
-      flagsIn.onGround = onGround;
-      flagsIn.isSneaking = keySneak;
-      flagsIn.inWater = inWater;
-      moveEntityHandler.moveEntity(this, velX, velY, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
-      isCollidedHorizontally = flagsOut.isCollidedHorizontally;
-      isCollidedVertically = flagsOut.isCollidedVertically;
-      isCollided = flagsOut.isCollided;
-      onGround = flagsOut.onGround;
+      moveEntity(moveEntityHandler, keySneak);
       velX *= (double)dragFactor;
       velY *= 0.800000011920929D;
       velZ *= (double)dragFactor;
       velY -= 0.02D;
-      if (isCollidedHorizontally) {
-        // Call to {net.minecraft.entity.Entity.isOffsetPositionInLiquid(double, double, double)}
-        final XYZAxisAlignedBB bb = boundingBox.offset(velX, velY + 0.6000000238418579D - posY + oldPosY, velZ);
-        if (!blockGrid.hasAnyCollidingBoundingBoxes(bb)) {
-          boolean isOffsetPositionInLiquid = false;
-          final int minX = MathHelper.floor_double(bb.minX);
-          final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-          final int minY = MathHelper.floor_double(bb.minY);
-          final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-          final int minZ = MathHelper.floor_double(bb.minZ);
-          final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
-          for (int x = minX; !isOffsetPositionInLiquid && x < maxX; x++) {
-            for (int y = minY; !isOffsetPositionInLiquid && y < maxY; y++) {
-              for (int z = minZ; !isOffsetPositionInLiquid && z < maxZ; z++) {
-                Block block = blockGrid.getBlockAt(x, y, z);
-                if (block instanceof BlockLiquid) {
-                  velY = 0.30000001192092896D;
-                  isOffsetPositionInLiquid = true;
-                }
-              }
-            }
-          }
-        }
-        // Return from isOffsetPositionInLiquid
-      }
+      if (isCollidedHorizontally
+          && isOffsetPositionInLiquid(blockGrid, velX, velY + 0.6000000238418579D - posY + oldPosY, velZ))
+        velY = 0.30000001192092896D;
     } else if (isInLava) { // {net.minecraft.entity.Entity.isInLava()}
       final double oldPosY = posY;
       // Call to {net.minecraft.entity.Entity.moveFlying(float, float, float)}
@@ -424,43 +464,14 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
         velZ += (double)(forward * cosYaw + strafe * sinYaw);
       }
       // Return from moveFlying
-      flagsIn.onGround = onGround;
-      flagsIn.isSneaking = keySneak;
-      flagsIn.inWater = inWater;
-      moveEntityHandler.moveEntity(this, velX, velY, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
-      isCollidedHorizontally = flagsOut.isCollidedHorizontally;
-      isCollidedVertically = flagsOut.isCollidedVertically;
-      isCollided = flagsOut.isCollided;
-      onGround = flagsOut.onGround;
+      moveEntity(moveEntityHandler, keySneak);
       velX *= 0.5D;
       velY *= 0.5D;
       velZ *= 0.5D;
       velY -= 0.02D;
-      if (isCollidedHorizontally) {
-        // Call to {net.minecraft.entity.Entity.isOffsetPositionInLiquid(double, double, double)}
-        final XYZAxisAlignedBB bb = boundingBox.offset(velX, velY + 0.6000000238418579D - posY + oldPosY, velZ);
-        if (!blockGrid.hasAnyCollidingBoundingBoxes(bb)) {
-          boolean isOffsetPositionInLiquid = false;
-          final int minX = MathHelper.floor_double(bb.minX);
-          final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-          final int minY = MathHelper.floor_double(bb.minY);
-          final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-          final int minZ = MathHelper.floor_double(bb.minZ);
-          final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
-          for (int x = minX; !isOffsetPositionInLiquid && x < maxX; x++) {
-            for (int y = minY; !isOffsetPositionInLiquid && y < maxY; y++) {
-              for (int z = minZ; !isOffsetPositionInLiquid && z < maxZ; z++) {
-                Block block = blockGrid.getBlockAt(x, y, z);
-                if (block instanceof BlockLiquid) {
-                  velY = 0.30000001192092896D;
-                  isOffsetPositionInLiquid = true;
-                }
-              }
-            }
-          }
-        }
-        // Return from isOffsetPositionInLiquid
-      }
+      if (isCollidedHorizontally
+          && isOffsetPositionInLiquid(blockGrid, velX, velY + 0.6000000238418579D - posY + oldPosY, velZ))
+        velY = 0.30000001192092896D;
     } else {
       final float friction = onGround
           ? cachedMovementSpeedFloat * blockGrid.getBlockAt(MathHelper.floor_double(posX),
@@ -484,64 +495,18 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
       // Return from moveFlying
       final double XZdampFactor = onGround ? blockGrid.getBlockAt(MathHelper.floor_double(posX),
           MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)).groundFriction : airFriction;
-      {
-        // Call to {net.minecraft.entity.EntityLivingBase.isOnLadder()}
-        final XYZAxisAlignedBB bb = boundingBox;
-        boolean isOnLadder = false;
-        final int minX = MathHelper.floor_double(bb.minX);
-        final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-        final int minY = MathHelper.floor_double(bb.minY);
-        final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-        final int minZ = MathHelper.floor_double(bb.minZ);
-        final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
-        for (int x = minX; !isOnLadder && x < maxX; x++) {
-          for (int y = minY; !isOnLadder && y < maxY; y++) {
-            for (int z = minZ; !isOnLadder && z < maxZ; z++) {
-              if (blockGrid.getBlockAt(x, y, z).isLadder) {
-                final float ladderVelocityCap = 0.15F;
-                velX = MathHelper.clamp_double(velX, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
-                velZ = MathHelper.clamp_double(velZ, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
-                if (keySneak && velY < 0.0D)
-                  velY = 0.0D;
-                else if (velY < -0.15D)
-                  velY = -0.15D;
-                isOnLadder = true;
-              }
-            }
-          }
-        }
-        // Return from isOnLadder
+      if (isOnLadder(blockGrid)) {
+        final float ladderVelocityCap = 0.15F;
+        velX = MathHelper.clamp_double(velX, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
+        velZ = MathHelper.clamp_double(velZ, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
+        if (keySneak && velY < 0.0D)
+          velY = 0.0D;
+        else if (velY < -0.15D)
+          velY = -0.15D;
       }
-      flagsIn.onGround = onGround;
-      flagsIn.isSneaking = keySneak;
-      flagsIn.inWater = inWater;
-      moveEntityHandler.moveEntity(this, velX, velY, velZ, flagsIn, flagsOut); // {net.minecraft.entity.Entity.moveEntity(double, double, double)}
-      isCollidedHorizontally = flagsOut.isCollidedHorizontally;
-      isCollidedVertically = flagsOut.isCollidedVertically;
-      isCollided = flagsOut.isCollided;
-      onGround = flagsOut.onGround;
-      if (isCollidedHorizontally) {
-        // Call to {net.minecraft.entity.EntityLivingBase.isOnLadder()}
-        final XYZAxisAlignedBB bb = boundingBox;
-        boolean isOnLadder = false;
-        final int minX = MathHelper.floor_double(bb.minX);
-        final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-        final int minY = MathHelper.floor_double(bb.minY);
-        final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-        final int minZ = MathHelper.floor_double(bb.minZ);
-        final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
-        for (int x = minX; !isOnLadder && x < maxX; x++) {
-          for (int y = minY; !isOnLadder && y < maxY; y++) {
-            for (int z = minZ; !isOnLadder && z < maxZ; z++) {
-              if (blockGrid.getBlockAt(x, y, z).isLadder) {
-                velY = 0.2D;
-                isOnLadder = true;
-              }
-            }
-          }
-        }
-        // Return from isOnLadder
-      }
+      moveEntity(moveEntityHandler, keySneak);
+      if (isCollidedHorizontally && isOnLadder(blockGrid))
+        velY = 0.2D;
       velY -= 0.08D;
       velY *= 0.9800000190734863D;
       velX *= XZdampFactor;
