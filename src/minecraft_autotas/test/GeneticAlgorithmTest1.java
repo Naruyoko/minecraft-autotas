@@ -46,6 +46,7 @@ public class GeneticAlgorithmTest1 {
     final StoneXZPlayer startingState;
     final IXZMoveEntityHandler<? super StoneXZPlayer> moveEntityHandler;
     int effectiveInputLength;
+    float mutationDeviation;
     final int fullSpinPixels = 2400;
     final int halfSpinPixels = fullSpinPixels / 2;
 
@@ -147,12 +148,16 @@ public class GeneticAlgorithmTest1 {
     public Individual mutate(Individual child) {
       for (int i = 0; i < effectiveInputLength; i++) {
         if (random.nextFloat() < mutationChance) {
-          int newInput = child.inputs[i] + (int)(random.nextGaussian() * 100);
-          if (newInput >= halfSpinPixels)
-            newInput -= fullSpinPixels;
-          else if (newInput < -halfSpinPixels)
-            newInput += fullSpinPixels;
-          child.inputs[i] = newInput;
+          int change = (int)(random.nextGaussian() * mutationDeviation);
+          int range = random.nextInt(10) + 1;
+          for (int j = 0; j < range && i + j < effectiveInputLength; j++) {
+            int newInput = child.inputs[i + j] + change;
+            if (newInput >= halfSpinPixels)
+              newInput -= fullSpinPixels;
+            else if (newInput < -halfSpinPixels)
+              newInput += fullSpinPixels;
+            child.inputs[i + j] = newInput;
+          }
         }
       }
       return child;
@@ -160,8 +165,10 @@ public class GeneticAlgorithmTest1 {
 
     @Override
     public Individual stepGeneration() {
-      effectiveInputLength = Math.max(Math.min(inputLength * generation * 2 / maxGeneration, inputLength),
-          inputLength / 10);
+      float timePercentage = (float)generation / (float)maxGeneration;
+      effectiveInputLength = Math.min(Math.max((int)(inputLength * timePercentage * 2.0F), inputLength / 10),
+          inputLength);
+      mutationDeviation = Math.min(Math.max((1.0F - timePercentage) * (1.0F - timePercentage) * 625.0F, 20.0F), 100.0F);
       return super.stepGeneration();
     }
 
@@ -211,7 +218,7 @@ public class GeneticAlgorithmTest1 {
       int maxGeneration = 10000;
       int inputLength = 100;
       float mutationChance = 0.01F;
-      float chooseProbabilityOffset = 1.0F;
+      float chooseProbabilityOffset = 0.1F;
       StoneXZPlayer startingState = new StoneXZPlayer(-0.5, 0.5, 0, 0, 0);
       Ground ground = new Ground();
       IXZMoveEntityHandler<? super StoneXZPlayer> moveEntityHandler = new XZMoveEntityHandlerFromCollidableSimpleGround(
