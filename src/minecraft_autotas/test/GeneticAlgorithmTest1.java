@@ -7,6 +7,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import minecraft_autotas.genetic.AbstractGeneticAlgorithm;
 import minecraft_simulator.v1_8_9.player.KeyConstants;
@@ -160,34 +163,70 @@ public class GeneticAlgorithmTest1 {
   }
 
   public static void main(String[] args) {
-    Date startDate = new Date();
-    int populationSize = 1000;
-    int maxGeneration = 10000;
-    int inputLength = 100;
-    float mutationChance = 0.01F;
-    float chooseProbabilityOffset = 1.0F;
-    StoneXZPlayer startingState = new StoneXZPlayer(-0.5, 0.5, 0, 0, 0);
-    Ground ground = new Ground();
-    IXZMoveEntityHandler<? super StoneXZPlayer> moveEntityHandler = new XZMoveEntityHandlerFromCollidableSimpleGround(
-        ground);
-    GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, maxGeneration, inputLength, mutationChance,
-        chooseProbabilityOffset, startingState, moveEntityHandler);
-    geneticAlgorithm.init();
-    long lastNanoTime = System.nanoTime();
-    while (geneticAlgorithm.getGeneration() <= maxGeneration) {
-      geneticAlgorithm.stepGeneration();
-      if (geneticAlgorithm.getBestIndividualIndex() >= 0)
-        System.out.println(String.format("New best! %f : %s", geneticAlgorithm.getBestScore(), Arrays.toString(Arrays
-            .copyOfRange(geneticAlgorithm.getBestIndividual().inputs, 0, geneticAlgorithm.getEffectiveInputLength()))));
-      long nanoTime = System.nanoTime();
-      System.out.println(String.format("Generation %d took %d ns. Best: %f", geneticAlgorithm.getGeneration() - 1,
-          nanoTime - lastNanoTime, geneticAlgorithm.getBestScore()));
-      lastNanoTime = nanoTime;
-    }
-    Individual bestIndividual = geneticAlgorithm.getBestIndividual();
     try {
+      Date startDate = new Date();
       DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
       String formattedDate = dateFormat.format(startDate);
+      Logger logger = Logger.getGlobal();
+      logger.addHandler(new Handler() {
+        BufferedWriter logWriter = new BufferedWriter(
+            new FileWriter(String.format("output/%s.log", formattedDate), false));
+
+        @Override
+        public void publish(LogRecord record) {
+          System.out.println(record.getMessage());
+          try {
+            logWriter.write(record.getMessage());
+            logWriter.newLine();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+
+        @Override
+        public void flush() {
+          try {
+            logWriter.flush();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+
+        @Override
+        public void close() throws SecurityException {
+          try {
+            logWriter.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      logger.setUseParentHandlers(false);
+      int populationSize = 1000;
+      int maxGeneration = 10000;
+      int inputLength = 100;
+      float mutationChance = 0.01F;
+      float chooseProbabilityOffset = 1.0F;
+      StoneXZPlayer startingState = new StoneXZPlayer(-0.5, 0.5, 0, 0, 0);
+      Ground ground = new Ground();
+      IXZMoveEntityHandler<? super StoneXZPlayer> moveEntityHandler = new XZMoveEntityHandlerFromCollidableSimpleGround(
+          ground);
+      GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, maxGeneration, inputLength,
+          mutationChance, chooseProbabilityOffset, startingState, moveEntityHandler);
+      geneticAlgorithm.init();
+      long lastNanoTime = System.nanoTime();
+      while (geneticAlgorithm.getGeneration() <= maxGeneration) {
+        geneticAlgorithm.stepGeneration();
+        if (geneticAlgorithm.getBestIndividualIndex() >= 0)
+          logger.info(String.format("New best! %f : %s", geneticAlgorithm.getBestScore(),
+              Arrays.toString(Arrays.copyOfRange(geneticAlgorithm.getBestIndividual().inputs, 0,
+                  geneticAlgorithm.getEffectiveInputLength()))));
+        long nanoTime = System.nanoTime();
+        logger.info(String.format("Generation %d took %d ns. Best: %f", geneticAlgorithm.getGeneration() - 1,
+            nanoTime - lastNanoTime, geneticAlgorithm.getBestScore()));
+        lastNanoTime = nanoTime;
+      }
+      Individual bestIndividual = geneticAlgorithm.getBestIndividual();
       BufferedWriter writer1 = new BufferedWriter(
           new FileWriter(String.format("output/result-%s.txt", formattedDate), false));
       BufferedWriter writer2 = new BufferedWriter(
