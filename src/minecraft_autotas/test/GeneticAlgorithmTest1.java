@@ -46,6 +46,8 @@ public class GeneticAlgorithmTest1 {
     final StoneXZPlayer startingState;
     final IXZMoveEntityHandler<? super StoneXZPlayer> moveEntityHandler;
     int effectiveInputLength;
+    final int fullSpinPixels = 2400;
+    final int halfSpinPixels = fullSpinPixels / 2;
 
     public GeneticAlgorithm(int populationSize, int maxGeneration, int inputLength, float mutationChance,
         float chooseProbabilityOffset, StoneXZPlayer startingState,
@@ -67,7 +69,7 @@ public class GeneticAlgorithmTest1 {
       individual.player = startingState.clone();
       individual.inputs = new int[inputLength];
       for (int i = 0; i < inputLength; i++)
-        individual.inputs[i] = random.nextInt(-1200, 1200);
+        individual.inputs[i] = random.nextInt(-halfSpinPixels, halfSpinPixels);
       return individual;
     }
 
@@ -91,7 +93,12 @@ public class GeneticAlgorithmTest1 {
       }
     }
 
-    public void stepPlayer(StoneXZPlayer player, int pixels) {
+    public void stepPlayer(StoneXZPlayer player, int[] inputs, int t) {
+      int pixels = t == 0 ? inputs[t] : inputs[t] - inputs[t - 1];
+      if (pixels >= halfSpinPixels)
+        pixels -= fullSpinPixels;
+      else if (pixels <= -halfSpinPixels)
+        pixels += fullSpinPixels;
       moveCameraWithDivision(player, pixels);
       player.step(moveEntityHandler, KeyConstants.RIGHT, KeyConstants.FORWARD, KeyConstants.DOWN, KeyConstants.UP);
     }
@@ -103,7 +110,7 @@ public class GeneticAlgorithmTest1 {
       StoneXZPlayer player = individual.player;
       StoneXZPlayer.copy(player, startingState);
       for (int t = 0; t < effectiveInputLength; t++) {
-        stepPlayer(player, individual.inputs[t]);
+        stepPlayer(player, individual.inputs, t);
         if (!player.onGround)
           break;
       }
@@ -138,8 +145,6 @@ public class GeneticAlgorithmTest1 {
 
     @Override
     public Individual mutate(Individual child) {
-      final int fullSpinPixels = 2400;
-      final int halfSpinPixels = fullSpinPixels / 2;
       for (int i = 0; i < effectiveInputLength; i++) {
         if (random.nextFloat() < mutationChance) {
           int newInput = child.inputs[i] + (int)(random.nextGaussian() * 100);
@@ -248,7 +253,7 @@ public class GeneticAlgorithmTest1 {
           + "###|WASD_+^|Yaw,Pitch|Flags" + System.lineSeparator());
       for (int t = -1; t < inputLength; t++) {
         if (t >= 0)
-          geneticAlgorithm.stepPlayer(player, bestIndividual.inputs[t]);
+          geneticAlgorithm.stepPlayer(player, bestIndividual.inputs, t);
         writer1.write(String.format("%3d %5s %-22s %-10s %-22s %-22s %-22s %-22s", t + 1,
             t >= 0 ? bestIndividual.inputs[t] : "-", Utility.padSignDouble(geneticAlgorithm.immediateFitness(player)),
             Utility.padSignFloat(player.yaw), Utility.padSignDouble(player.posX), Utility.padSignDouble(player.posZ),
