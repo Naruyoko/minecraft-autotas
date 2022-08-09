@@ -10,7 +10,8 @@ public abstract class AbstractGeneticAlgorithm<Individual> {
   protected int generation;
   protected List<Individual> lastPopulation;
   protected List<Individual> population;
-  protected List<Individual> nextPopulation;
+  private List<Individual> nextPopulation;
+  protected double[] lastFitnesses;
   protected double[] fitnesses;
   protected int bestIndividualIndex;
   protected Individual bestIndividual;
@@ -28,14 +29,15 @@ public abstract class AbstractGeneticAlgorithm<Individual> {
 
   public void init() {
     random = ThreadLocalRandom.current();
-    generation = 1;
-    lastPopulation = null;
+    generation = 0;
+    lastPopulation = new ArrayList<>(populationSize);
     population = new ArrayList<>(populationSize);
-    nextPopulation = new ArrayList<>(populationSize);
+    nextPopulation = null;
     for (int i = 0; i < populationSize; i++) {
-      population.add(generateRandomIndividual());
-      nextPopulation.add(generateEmptyIndividual());
+      lastPopulation.add(null);
+      population.add(null);
     }
+    lastFitnesses = new double[populationSize];
     fitnesses = new double[populationSize];
     bestIndividualIndex = -1;
     bestIndividual = generateEmptyIndividual();
@@ -46,10 +48,15 @@ public abstract class AbstractGeneticAlgorithm<Individual> {
 
   public abstract Individual generateEmptyIndividual();
 
-  public void scorePopulation() {
+  public void nextGeneration() {
+    generation++;
+    nextPopulation = lastPopulation;
+    lastPopulation = population;
+    population = nextPopulation;
+    System.arraycopy(fitnesses, 0, lastFitnesses, 0, populationSize);
     bestIndividualIndex = -1;
     for (int i = 0; i < populationSize; i++) {
-      double fitness = evaluate(population.get(i));
+      double fitness = generateAndScore(i);
       fitnesses[i] = fitness;
       if (fitness > bestScore) {
         bestScore = fitness;
@@ -61,25 +68,29 @@ public abstract class AbstractGeneticAlgorithm<Individual> {
     }
   }
 
+  public double generateAndScore(int index) {
+    Individual individual;
+    if (generation == 1) {
+      lastPopulation.set(index, generateEmptyIndividual());
+      population.set(index, individual = generateRandomIndividual());
+    } else if (index == 0) {
+      population.set(index, individual = copyIndividual(population.get(index), bestIndividual));
+    } else {
+      population.set(index, individual = generateChild(randomParent(), randomParent(), index));
+    }
+    return evaluate(individual);
+  }
+
   public abstract double evaluate(Individual individual);
 
   public abstract Individual copyIndividual(Individual target, Individual source);
 
-  public void generateNextGeneration() {
-    nextPopulation.set(0, copyIndividual(nextPopulation.get(0), bestIndividual));
-    for (int childIndex = 1; childIndex < populationSize; childIndex++)
-      nextPopulation.set(childIndex, generateChild(randomParent(), randomParent(), childIndex));
-    lastPopulation = population;
-    population = nextPopulation;
-    nextPopulation = lastPopulation;
-  }
-
-  public Individual randomParent() { return population.get(randomParentIndex()); }
+  public Individual randomParent() { return lastPopulation.get(randomParentIndex()); }
 
   public abstract int randomParentIndex();
 
   public Individual generateChild(Individual parent1, Individual parent2, int childIndex) {
-    Individual child = nextPopulation.get(childIndex);
+    Individual child = population.get(childIndex);
     child = crossover(parent1, parent2, child);
     child = mutate(child);
     return child;
@@ -90,9 +101,7 @@ public abstract class AbstractGeneticAlgorithm<Individual> {
   public abstract Individual mutate(Individual child);
 
   public Individual stepGeneration() {
-    scorePopulation();
-    generateNextGeneration();
-    generation++;
+    nextGeneration();
     return bestIndividual;
   }
 }
