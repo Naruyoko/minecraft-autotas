@@ -73,6 +73,8 @@ public class Level5 extends AbstractXYZStoneGrid {
       return ((blocks[(z - 19) * 2 + (x >= 1200 ? 0 : 1)] >>> (x >= 1200 ? x - 1200 : x - 1168)) & 1) == 0;
     else if (y == 12)
       return x == 1200 && (z == 50 || z == 52);
+    else if (y == 12)
+      return x == 1200 && z == 51;
     else
       return false;
   }

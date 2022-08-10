@@ -35,6 +35,8 @@ public class Level1 extends AbstractXYZStoneGrid {
         return x >= 995 && x <= 997 && z >= 78 && z <= 96;
     } else if (y == 16)
       return z == 95 && (x == 995 || x == 997);
+    else if (y == 17)
+      return x == 996 && z == 95;
     else
       return false;
   }

@@ -38,6 +38,8 @@ public class Level4 extends AbstractXYZBlockGrid {
         return x >= 1145 && x <= 1147 && z >= 94 && z <= 96;
     } else if (y == 16)
       return z == 95 && (x == 1145 || x == 1147);
+    else if (y == 17)
+      return x == 1146 && z == 95;
     else
       return false;
   }
