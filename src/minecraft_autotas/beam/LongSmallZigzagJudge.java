@@ -5,8 +5,13 @@ import minecraft_simulator.v1_8_9.util.MathHelper;
 import minecraft_simulator.v1_8_9.player.SprintingClearStoneXZPlayer;
 
 public class LongSmallZigzagJudge extends SmallZigzagJudge {
-  public static final boolean[] pathShape = new boolean[] { true, false, false, true, true, true, true, false, false,
-      true, false, false, true, true, true, true, false, false };
+  //@formatter:off
+  public static final boolean[] pathShape = new boolean[] {
+    true, false, false, true, true, true,
+    true, false, false, true, false, false,
+    true, true, true, true, false, false
+  };
+  //@formatter:on
 
   boolean canStandOnBlock(SprintingClearStoneXZPlayer player, int x, int z) {
     // Calculate path shape

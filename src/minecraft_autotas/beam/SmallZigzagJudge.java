@@ -10,8 +10,13 @@ public class SmallZigzagJudge implements IJudge {
 
   public SprintingClearStoneXZPlayer getStartingState() { return startingState.clone(); }
 
-  public static final boolean[] pathShape = new boolean[] { true, false, true, true, true, false, true, false, true,
-      true, true, false };
+  //@formatter:off
+  public static final boolean[] pathShape = new boolean[] {
+    true, false, true, true,
+    true, false, true, false,
+    true, true, true, false
+  };
+  //@formatter:on
 
   boolean canStandOnBlock(SprintingClearStoneXZPlayer player, int x, int z) {
     // Calculate path shape
