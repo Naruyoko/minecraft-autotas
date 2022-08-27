@@ -2,7 +2,7 @@ package minecraft_simulator.v1_14.player;
 
 import minecraft_simulator.v1_14.block.Block;
 import minecraft_simulator.v1_14.block.BlockLiquid;
-import minecraft_simulator.v1_14.collision.XYZAxisAlignedBB;
+import minecraft_simulator.v1_14.collision.XYZBoundingBox;
 import minecraft_simulator.v1_14.util.MathHelper;
 import minecraft_simulator.v1_14.world.AbstractXYZBlockGrid;
 import minecraft_simulator.v1_14.world.SimulationFlagsIn;
@@ -37,13 +37,13 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
   public final SimulationFlagsIn flagsIn = new SimulationFlagsIn();
   public final SimulationFlagsOut flagsOut = new SimulationFlagsOut();
 
-  public InvincibleXYZPlayer(XYZAxisAlignedBB boundingBox, double posX, double posY, double posZ, double velX,
+  public InvincibleXYZPlayer(XYZBoundingBox boundingBox, double posX, double posY, double posZ, double velX,
       double velY, double velZ, float yaw, boolean checkSneaking, boolean checkStepping, boolean checkWater) {
     super(boundingBox, posX, posY, posZ, velX, velY, velZ, yaw);
     init(checkSneaking, checkStepping, checkWater);
   }
 
-  public InvincibleXYZPlayer(XYZAxisAlignedBB boundingBox, double posX, double posY, double posZ, double velX,
+  public InvincibleXYZPlayer(XYZBoundingBox boundingBox, double posX, double posY, double posZ, double velX,
       double velY, double velZ, float yaw) {
     super(boundingBox, posX, posY, posZ, velX, velY, velZ, yaw);
     init();
@@ -210,13 +210,13 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
 
   /**
    * See {net.minecraft.entity.Entity.handleWaterMovement()} and
-   * {net.minecraft.world.World.handleMaterialAcceleration(AxisAlignedBB,
-   * Material, Entity)}
+   * {net.minecraft.world.World.handleMaterialAcceleration(BoundingBox, Material,
+   * Entity)}
    */
   @Override
   public void handleWaterMovement(AbstractXYZBlockGrid blockGrid) {
     inWater = false;
-    final XYZAxisAlignedBB bb = boundingBox.expandAndContract(0.0D, -0.4000000059604645D, 0.0D, 0.001D, 0.001D, 0.001D);
+    final XYZBoundingBox bb = boundingBox.expandAndContract(0.0D, -0.4000000059604645D, 0.0D, 0.001D, 0.001D, 0.001D);
     final int minX = MathHelper.floor_double(bb.minX);
     final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
     final int minY = MathHelper.floor_double(bb.minY);
@@ -261,7 +261,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
    * See {net.minecraft.entity.Entity.isInLava()}
    */
   private boolean isInLava(AbstractXYZBlockGrid blockGrid) {
-    final XYZAxisAlignedBB bb = boundingBox.expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D);
+    final XYZBoundingBox bb = boundingBox.expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D);
     final int minX = MathHelper.floor_double(bb.minX);
     final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
     final int minY = MathHelper.floor_double(bb.minY);
@@ -286,7 +286,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
    */
   private boolean isOffsetPositionInLiquid(AbstractXYZBlockGrid blockGrid, double offsetX, double offsetY,
       double offsetZ) {
-    final XYZAxisAlignedBB bb = boundingBox.offset(offsetX, offsetY, offsetZ);
+    final XYZBoundingBox bb = boundingBox.offset(offsetX, offsetY, offsetZ);
     if (!blockGrid.hasAnyCollidingBoundingBoxes(bb)) {
       final int minX = MathHelper.floor_double(bb.minX);
       final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
@@ -310,7 +310,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
    * See {net.minecraft.entity.EntityLivingBase.isOnLadder()}
    */
   private boolean isOnLadder(AbstractXYZBlockGrid blockGrid) {
-    final XYZAxisAlignedBB bb = boundingBox;
+    final XYZBoundingBox bb = boundingBox;
     final int minX = MathHelper.floor_double(bb.minX);
     final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
     final int minY = MathHelper.floor_double(bb.minY);
@@ -366,7 +366,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
       final float keyForward, final boolean keyJump, final boolean keySprint, final boolean keySneak) {
     AbstractXYZBlockGrid blockGrid = moveEntityHandler.blockGrid;
     // Start {net.minecraft.client.entity.EntityLiving.onEntityUpdate()}
-    // Call to {net.minecraft.entity.Entity.handleWaterMovement()}, see {net.minecraft.world.World.handleMaterialAcceleration(AxisAlignedBB, Material, Entity)}
+    // Call to {net.minecraft.entity.Entity.handleWaterMovement()}, see {net.minecraft.world.World.handleMaterialAcceleration(BoundingBox, Material, Entity)}
     handleWaterMovement(blockGrid);
     // Start {net.minecraft.client.entity.EntityPlayerSP.onLivingUpdate()}
     if (sprintingTicksLeft > 0 && --sprintingTicksLeft == 0)

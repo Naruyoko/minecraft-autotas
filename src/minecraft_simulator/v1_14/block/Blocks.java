@@ -2,8 +2,8 @@ package minecraft_simulator.v1_14.block;
 
 import java.util.List;
 
-import minecraft_simulator.v1_14.collision.XYZAxisAlignedBB;
-import minecraft_simulator.v1_14.collision.XZAxisAlignedBB;
+import minecraft_simulator.v1_14.collision.XYZBoundingBox;
+import minecraft_simulator.v1_14.collision.XZBoundingBox;
 import minecraft_simulator.v1_14.player.AbstractXYZPlayer;
 import minecraft_simulator.v1_14.world.SimulationFlagsIn;
 import minecraft_simulator.v1_14.world.SimulationFlagsOut;
@@ -20,13 +20,13 @@ public class Blocks {
   // See {net.minecraft.block.BlockBrewingStand}
   public static final Block brewingStand = new Block(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F) {
     @Override
-    public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+    public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
       addCollisionBoxFromBoundsToList(x, y, z, 0.4375F, 0.0F, 0.4375F, 0.5625F, 0.875F, 0.5625F, mask, list);
       super.addCollisionBoxesToList(x, y, z, mask, list);
     };
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
       if (isCollidingBoxFromBounds(x, y, z, 0.4375F, 0.0F, 0.4375F, 0.5625F, 0.875F, 0.5625F, mask))
         return true;
       if (super.hasAnyCollidingBoundingBoxes(x, y, z, mask))
@@ -141,16 +141,16 @@ public class Blocks {
   // See {net.minecraft.block.BlockCuctus}
   public static final Block cactus = new Block() {
     @Override
-    public XZAxisAlignedBB getCollisionBoundingBox(int x, int z) {
+    public XZBoundingBox getCollisionBoundingBox(int x, int z) {
       final float missing = 0.0625F;
-      return new XZAxisAlignedBB((double)((float)x + missing), (double)((float)z + missing),
+      return new XZBoundingBox((double)((float)x + missing), (double)((float)z + missing),
           (double)((float)(x + 1) - missing), (double)((float)(z + 1) - missing));
     }
 
     @Override
-    public XYZAxisAlignedBB getCollisionBoundingBox(int x, int y, int z) {
+    public XYZBoundingBox getCollisionBoundingBox(int x, int y, int z) {
       final float missing = 0.0625F;
-      return new XYZAxisAlignedBB((double)((float)x + missing), (double)y, (double)((float)z + missing),
+      return new XYZBoundingBox((double)((float)x + missing), (double)y, (double)((float)z + missing),
           (double)((float)(x + 1) - missing), (double)((float)(y + 1) - missing), (double)((float)(z + 1) - missing));
     }
 
@@ -163,7 +163,7 @@ public class Blocks {
   // See {net.minecraft.block.BlockCauldron}
   public static final Block cauldron = new Block() {
     @Override
-    public void addCollisionBoxesToListAsFloor(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
+    public void addCollisionBoxesToListAsFloor(int x, int z, XZBoundingBox mask, List<XZBoundingBox> list) {
       final float thickness = 0.125F;
       addCollisionBoxFromBoundsToList(x, z, 0.0F, 0.0F, thickness, 1.0F, mask, list);
       addCollisionBoxFromBoundsToList(x, z, 0.0F, 0.0F, 1.0F, thickness, mask, list);
@@ -172,7 +172,7 @@ public class Blocks {
     }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxesAsFloor(int x, int z, XZAxisAlignedBB mask) {
+    public boolean hasAnyCollidingBoundingBoxesAsFloor(int x, int z, XZBoundingBox mask) {
       final float thickness = 0.125F;
       if (isCollidingBoxFromBounds(x, z, 0.0F, 0.0F, thickness, 1.0F, mask))
         return true;
@@ -186,7 +186,7 @@ public class Blocks {
     }
 
     @Override
-    public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+    public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
       addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F, mask, list);
       final float thickness = 0.125F;
       addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F, mask, list);
@@ -196,7 +196,7 @@ public class Blocks {
     }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
       if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F, mask))
         return true;
       final float thickness = 0.125F;
@@ -251,12 +251,12 @@ public class Blocks {
   // See {net.minecraft.block.BlockEndPortalFrame}
   public static final Block endPortalFrameUnfilled = new Block(0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F) {
     @Override
-    public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+    public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
       addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F, mask, list);
     }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
       if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F, mask))
         return true;
       return false;
@@ -265,13 +265,13 @@ public class Blocks {
   public static final Block endPortalFrame = endPortalFrameUnfilled;
   public static final Block endPortalFrameFilled = new Block(0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F) {
     @Override
-    public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+    public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
       addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F, mask, list);
       addCollisionBoxFromBoundsToList(x, y, z, 0.3125F, 0.8125F, 0.3125F, 0.6875F, 1.0F, 0.6875F, mask, list);
     }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
       if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F, mask))
         return true;
       if (isCollidingBoxFromBounds(x, y, z, 0.3125F, 0.8125F, 0.3125F, 0.6875F, 1.0F, 0.6875F, mask))
@@ -292,13 +292,13 @@ public class Blocks {
       if (connectsWest || connectsEast)
         return new Block(minX, 0.0F, minZ, maxX, 1.0F, maxZ) {
           @Override
-          public void addCollisionBoxesToList(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
+          public void addCollisionBoxesToList(int x, int z, XZBoundingBox mask, List<XZBoundingBox> list) {
             addCollisionBoxFromBoundsToList(x, z, centerMin, minZ, centerMax, maxZ, mask, list);
             addCollisionBoxFromBoundsToList(x, z, minX, centerMin, maxX, centerMax, mask, list);
           };
 
           @Override
-          public boolean hasAnyCollidingBoundingBoxes(int x, int z, XZAxisAlignedBB mask) {
+          public boolean hasAnyCollidingBoundingBoxes(int x, int z, XZBoundingBox mask) {
             if (isCollidingBoxFromBounds(x, z, centerMin, minZ, centerMax, maxZ, mask))
               return true;
             if (isCollidingBoxFromBounds(x, z, minX, centerMin, maxX, centerMax, mask))
@@ -307,13 +307,13 @@ public class Blocks {
           };
 
           @Override
-          public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+          public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
             addCollisionBoxFromBoundsToList(x, y, z, centerMin, 0.0F, minZ, centerMax, 1.5F, maxZ, mask, list);
             addCollisionBoxFromBoundsToList(x, y, z, minX, 0.0F, centerMin, maxX, 1.5F, centerMax, mask, list);
           };
 
           @Override
-          public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+          public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
             if (isCollidingBoxFromBounds(x, y, z, centerMin, 0.0F, minZ, centerMax, 1.5F, maxZ, mask))
               return true;
             if (isCollidingBoxFromBounds(x, y, z, minX, 0.0F, centerMin, maxX, 1.5F, centerMax, mask))
@@ -324,24 +324,24 @@ public class Blocks {
       else
         return new Block(minX, 0.0F, minZ, maxX, 1.0F, maxZ) {
           @Override
-          public void addCollisionBoxesToList(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
+          public void addCollisionBoxesToList(int x, int z, XZBoundingBox mask, List<XZBoundingBox> list) {
             addCollisionBoxFromBoundsToList(x, z, centerMin, minZ, centerMax, maxZ, mask, list);
           };
 
           @Override
-          public boolean hasAnyCollidingBoundingBoxes(int x, int z, XZAxisAlignedBB mask) {
+          public boolean hasAnyCollidingBoundingBoxes(int x, int z, XZBoundingBox mask) {
             if (isCollidingBoxFromBounds(x, z, centerMin, minZ, centerMax, maxZ, mask))
               return true;
             return false;
           };
 
           @Override
-          public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+          public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
             addCollisionBoxFromBoundsToList(x, y, z, centerMin, 0.0F, minZ, centerMax, 1.5F, maxZ, mask, list);
           };
 
           @Override
-          public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+          public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
             if (isCollidingBoxFromBounds(x, y, z, centerMin, 0.0F, minZ, centerMax, 1.5F, maxZ, mask))
               return true;
             return false;
@@ -350,24 +350,24 @@ public class Blocks {
     } else
       return new Block(minX, 0.0F, minZ, maxX, 1.0F, maxZ) {
         @Override
-        public void addCollisionBoxesToList(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
+        public void addCollisionBoxesToList(int x, int z, XZBoundingBox mask, List<XZBoundingBox> list) {
           addCollisionBoxFromBoundsToList(x, z, minX, centerMin, maxX, centerMax, mask, list);
         };
 
         @Override
-        public boolean hasAnyCollidingBoundingBoxes(int x, int z, XZAxisAlignedBB mask) {
+        public boolean hasAnyCollidingBoundingBoxes(int x, int z, XZBoundingBox mask) {
           if (isCollidingBoxFromBounds(x, z, minX, centerMin, maxX, centerMax, mask))
             return true;
           return false;
         };
 
         @Override
-        public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+        public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
           addCollisionBoxFromBoundsToList(x, y, z, minX, 0.0F, centerMin, maxX, 1.5F, centerMax, mask, list);
         };
 
         @Override
-        public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+        public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
           if (isCollidingBoxFromBounds(x, y, z, minX, 0.0F, centerMin, maxX, 1.5F, centerMax, mask))
             return true;
           return false;
@@ -405,7 +405,7 @@ public class Blocks {
   // See {net.minecraft.block.BlockHopper}
   public static final Block hopper = new Block() {
     @Override
-    public void addCollisionBoxesToListAsFloor(int x, int z, XZAxisAlignedBB mask, List<XZAxisAlignedBB> list) {
+    public void addCollisionBoxesToListAsFloor(int x, int z, XZBoundingBox mask, List<XZBoundingBox> list) {
       final float thickness = 0.125F;
       addCollisionBoxFromBoundsToList(x, z, 0.0F, 0.0F, thickness, 1.0F, mask, list);
       addCollisionBoxFromBoundsToList(x, z, 0.0F, 0.0F, 1.0F, thickness, mask, list);
@@ -414,7 +414,7 @@ public class Blocks {
     }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxesAsFloor(int x, int z, XZAxisAlignedBB mask) {
+    public boolean hasAnyCollidingBoundingBoxesAsFloor(int x, int z, XZBoundingBox mask) {
       final float thickness = 0.125F;
       if (isCollidingBoxFromBounds(x, z, 0.0F, 0.0F, thickness, 1.0F, mask))
         return true;
@@ -428,7 +428,7 @@ public class Blocks {
     }
 
     @Override
-    public void addCollisionBoxesToList(int x, int y, int z, XYZAxisAlignedBB mask, List<XYZAxisAlignedBB> list) {
+    public void addCollisionBoxesToList(int x, int y, int z, XYZBoundingBox mask, List<XYZBoundingBox> list) {
       addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.625F, 1.0F, mask, list);
       final float thickness = 0.125F;
       addCollisionBoxFromBoundsToList(x, y, z, 0.0F, 0.0F, 0.0F, thickness, 1.0F, 1.0F, mask, list);
@@ -438,7 +438,7 @@ public class Blocks {
     }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZAxisAlignedBB mask) {
+    public boolean hasAnyCollidingBoundingBoxes(int x, int y, int z, XYZBoundingBox mask) {
       if (isCollidingBoxFromBounds(x, y, z, 0.0F, 0.0F, 0.0F, 1.0F, 0.625F, 1.0F, mask))
         return true;
       final float thickness = 0.125F;
@@ -626,14 +626,14 @@ public class Blocks {
   // See {net.minecraft.block.BlockSoulSand}
   public static final Block soulsand = new Block() {
     @Override
-    public XZAxisAlignedBB getCollisionBoundingBox(int x, int z) {
-      return new XZAxisAlignedBB((double)x, (double)z, (double)(x + 1), (double)(z + 1));
+    public XZBoundingBox getCollisionBoundingBox(int x, int z) {
+      return new XZBoundingBox((double)x, (double)z, (double)(x + 1), (double)(z + 1));
     }
 
     @Override
-    public XYZAxisAlignedBB getCollisionBoundingBox(int x, int y, int z) {
+    public XYZBoundingBox getCollisionBoundingBox(int x, int y, int z) {
       final float missing = 0.125F;
-      return new XYZAxisAlignedBB((double)x, (double)y, (double)z, (double)(x + 1), (double)((float)(y + 1) - missing),
+      return new XYZBoundingBox((double)x, (double)y, (double)z, (double)(x + 1), (double)((float)(y + 1) - missing),
           (double)(z + 1));
     }
 

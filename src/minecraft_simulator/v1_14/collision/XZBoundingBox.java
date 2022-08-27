@@ -1,25 +1,28 @@
 package minecraft_simulator.v1_14.collision;
 
 /**
- * A mutable and XZ-only version of {net.minecraft.util.AxisAlignedBB}
+ * A mutable and XZ-only version of {net.minecraft.util.math.BoundingBox}
  */
-//TODO: update
-public class XZAxisAlignedBB implements Cloneable {
+public class XZBoundingBox implements Cloneable {
   public double minX;
   public double minZ;
   public double maxX;
   public double maxZ;
 
-  public XZAxisAlignedBB(double minX, double minZ, double maxX, double maxZ) {
+  /**
+   * Note: unlike the source, this does not swap if maximum given was smaller than
+   * the minimum
+   */
+  public XZBoundingBox(double minX, double minZ, double maxX, double maxZ) {
     this.minX = minX;
     this.minZ = minZ;
     this.maxX = maxX;
     this.maxZ = maxZ;
   }
 
-  public XZAxisAlignedBB clone() { return new XZAxisAlignedBB(minX, minZ, maxX, maxZ); }
+  public XZBoundingBox clone() { return new XZBoundingBox(minX, minZ, maxX, maxZ); }
 
-  public static XZAxisAlignedBB copy(XZAxisAlignedBB target, XZAxisAlignedBB source) {
+  public static XZBoundingBox copy(XZBoundingBox target, XZBoundingBox source) {
     target.minX = source.minX;
     target.minZ = source.minZ;
     target.maxX = source.maxX;
@@ -29,12 +32,12 @@ public class XZAxisAlignedBB implements Cloneable {
 
   /**
    * In-place and XZ-only version of
-   * {net.minecraft.util.AxisAlignedBB.offset(double, double, double)}
+   * {net.minecraft.util.math.BoundingBox.offset(double, double, double)}
    * 
    * @param x
    * @param z
    */
-  public XZAxisAlignedBB mutatingOffset(double x, double z) {
+  public XZBoundingBox mutatingOffset(double x, double z) {
     this.minX = this.minX + x;
     this.minZ = this.minZ + z;
     this.maxX = this.maxX + x;
@@ -42,27 +45,27 @@ public class XZAxisAlignedBB implements Cloneable {
     return this;
   }
 
-  public static XZAxisAlignedBB copyOffset(XZAxisAlignedBB target, XZAxisAlignedBB source, double x, double z) {
+  public static XZBoundingBox copyOffset(XZBoundingBox target, XZBoundingBox source, double x, double z) {
     return copy(target, source).mutatingOffset(x, z);
   }
 
   /**
    * Out-place and XZ-only version of
-   * {net.minecraft.util.AxisAlignedBB.offset(double, double, double)}
+   * {net.minecraft.util.math.BoundingBox.offset(double, double, double)}
    * 
    * @param x
    * @param z
    */
-  public XZAxisAlignedBB offset(double x, double z) { return this.clone().mutatingOffset(x, z); }
+  public XZBoundingBox offset(double x, double z) { return this.clone().mutatingOffset(x, z); }
 
   /**
    * In-place and XZ-only version of
-   * {net.minecraft.util.AxisAlignedBB.addCoord(double, double, double)}
+   * {net.minecraft.util.math.BoundingBox.stretch(double, double, double)}
    * 
    * @param x
    * @param z
    */
-  public XZAxisAlignedBB mutatingAddCoord(double x, double z) {
+  public XZBoundingBox mutatingStretch(double x, double z) {
     if (x < 0.0D)
       this.minX += x;
     else if (x > 0.0D)
@@ -74,27 +77,29 @@ public class XZAxisAlignedBB implements Cloneable {
     return this;
   }
 
-  public static XZAxisAlignedBB copyAddCoord(XZAxisAlignedBB target, XZAxisAlignedBB source, double x, double z) {
-    return copy(target, source).mutatingAddCoord(x, z);
+  public static XZBoundingBox copyStretch(XZBoundingBox target, XZBoundingBox source, double x, double z) {
+    return copy(target, source).mutatingStretch(x, z);
   }
 
   /**
    * Out-place and XZ-only version of
-   * {net.minecraft.util.AxisAlignedBB.addCoord(double, double, double)}
+   * {net.minecraft.util.math.BoundingBox.stretch(double, double, double)}
    * 
    * @param x
    * @param z
    */
-  public XZAxisAlignedBB addCoord(double x, double z) { return this.clone().mutatingAddCoord(x, z); }
+  public XZBoundingBox stretch(double x, double z) { return this.clone().mutatingStretch(x, z); }
 
   /**
    * XZ-only version of
-   * {net.minecraft.util.AxisAlignedBB.calculateXOffset(AxisAlignedBB, double)}
+   * {net.minecraft.util.math.BoundingBox.calculateXOffset(BoundingBox, double)}
+   * 
+   * TODO: find corresponding function
    * 
    * @param other
    * @return
    */
-  public double calculateHorizontalXOffset(XZAxisAlignedBB other, double offsetX) {
+  public double calculateHorizontalXOffset(XZBoundingBox other, double offsetX) {
     if (other.maxZ > this.minZ && other.minZ < this.maxZ) {
       if (offsetX > 0.0D && other.maxX <= this.minX)
         return Math.min(this.minX - other.maxX, offsetX);
@@ -108,12 +113,14 @@ public class XZAxisAlignedBB implements Cloneable {
 
   /**
    * XZ-only version of
-   * {net.minecraft.util.AxisAlignedBB.calculateZOffset(AxisAlignedBB, double)}
+   * {net.minecraft.util.math.BoundingBox.calculateZOffset(BoundingBox, double)}
+   * 
+   * TODO: find corresponding function
    * 
    * @param other
    * @return
    */
-  public double calculateHorizontalZOffset(XZAxisAlignedBB other, double offsetZ) {
+  public double calculateHorizontalZOffset(XZBoundingBox other, double offsetZ) {
     if (other.maxX > this.minX && other.minX < this.maxX) {
       if (offsetZ > 0.0D && other.maxZ <= this.minZ)
         return Math.min(this.minZ - other.maxZ, offsetZ);
@@ -127,12 +134,12 @@ public class XZAxisAlignedBB implements Cloneable {
 
   /**
    * XZ-only version of
-   * {net.minecraft.util.AxisAlignedBB.intersectsWith(AxisAlignedBB)}
+   * {net.minecraft.util.math.BoundingBox.intersects(BoundingBox)}
    * 
    * @param other
    * @return
    */
-  public boolean intersectsHorizontallyWith(XZAxisAlignedBB other) {
-    return other.maxX > this.minX && other.minX < this.maxX && other.maxZ > this.minZ && other.minZ < this.maxZ;
+  public boolean intersectsHorizontally(XZBoundingBox other) {
+    return this.minX < other.maxX && this.maxX > other.minX && this.minZ < other.maxZ && this.maxZ > other.minZ;
   }
 }

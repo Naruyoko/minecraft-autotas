@@ -5,7 +5,7 @@ import java.util.List;
 
 import minecraft_simulator.v1_14.block.Blocks;
 import minecraft_simulator.v1_14.collision.ICollidable;
-import minecraft_simulator.v1_14.collision.XYZAxisAlignedBB;
+import minecraft_simulator.v1_14.collision.XYZBoundingBox;
 import minecraft_simulator.v1_14.util.MathHelper;
 
 /**
@@ -17,14 +17,14 @@ public abstract class AbstractXYZStoneGrid implements ICollidable {
 
   /**
    * See {net.minecraft.world.World.getCollidingBoundingBoxes(Entity,
-   * AxisAlignedBB)}
+   * BoundingBox)}
    * 
    * @param player
    * @return
    */
   @Override
-  public List<XYZAxisAlignedBB> getCollidingBoundingBoxes(XYZAxisAlignedBB bb) {
-    final List<XYZAxisAlignedBB> list = new ArrayList<>();
+  public List<XYZBoundingBox> getCollidingBoundingBoxes(XYZBoundingBox bb) {
+    final List<XYZBoundingBox> list = new ArrayList<>();
     final int minX = MathHelper.floor_double(bb.minX);
     final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
     final int minY = MathHelper.floor_double(bb.minY);
@@ -49,7 +49,7 @@ public abstract class AbstractXYZStoneGrid implements ICollidable {
    * @return
    */
   @Override
-  public boolean hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB bb) {
+  public boolean hasAnyCollidingBoundingBoxes(XYZBoundingBox bb) {
     final int minX = MathHelper.floor_double(bb.minX);
     final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
     final int minY = MathHelper.floor_double(bb.minY);

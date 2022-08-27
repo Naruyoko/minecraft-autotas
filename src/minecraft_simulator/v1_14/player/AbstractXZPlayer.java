@@ -1,19 +1,19 @@
 package minecraft_simulator.v1_14.player;
 
-import minecraft_simulator.v1_14.collision.XZAxisAlignedBB;
+import minecraft_simulator.v1_14.collision.XZBoundingBox;
 
 // TODO: update
 public abstract class AbstractXZPlayer {
   // See {net.minecraft.entity.player.EntityPlayer.preparePlayerToSpawn()}
   public final float width = 0.6F;
-  public XZAxisAlignedBB boundingBox; // {net.minecraft.entity.Entity.boundingBox}
+  public XZBoundingBox boundingBox; // {net.minecraft.entity.Entity.boundingBox}
   public double posX; // {net.minecraft.entity.Entity.posX}
   public double posZ; // {net.minecraft.entity.Entity.posZ}
   public double velX; // {net.minecraft.entity.Entity.motionX}
   public double velZ; // {net.minecraft.entity.Entity.motionZ}
   public float yaw; // {net.minecraft.entity.Entity.rotationYaw}
 
-  public AbstractXZPlayer(XZAxisAlignedBB boundingBox, double posX, double posZ, double velX, double velZ, float yaw) {
+  public AbstractXZPlayer(XZBoundingBox boundingBox, double posX, double posZ, double velX, double velZ, float yaw) {
     this.boundingBox = boundingBox;
     this.posX = posX;
     this.posZ = posZ;
@@ -26,7 +26,7 @@ public abstract class AbstractXZPlayer {
     this(null, posX, posZ, velX, velZ, yaw);
     // See {net.minecraft.entity.Entity.setPosition(double, double, double)}
     final float halfWidth = width / 2.0F;
-    this.boundingBox = new XZAxisAlignedBB(posX - (double)halfWidth, posZ - (double)halfWidth, posX + (double)halfWidth,
+    this.boundingBox = new XZBoundingBox(posX - (double)halfWidth, posZ - (double)halfWidth, posX + (double)halfWidth,
         posZ + (double)halfWidth);
   }
 
@@ -35,7 +35,7 @@ public abstract class AbstractXZPlayer {
   public static void copy(AbstractXZPlayer target, AbstractXZPlayer source) {
     target.posX = source.posX;
     target.posZ = source.posZ;
-    XZAxisAlignedBB.copy(target.boundingBox, source.boundingBox);
+    XZBoundingBox.copy(target.boundingBox, source.boundingBox);
     target.velX = source.velX;
     target.velZ = source.velZ;
     target.yaw = source.yaw;

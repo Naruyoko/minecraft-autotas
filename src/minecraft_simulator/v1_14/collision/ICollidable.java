@@ -4,7 +4,7 @@ import java.util.List;
 
 // TODO: update
 public interface ICollidable {
-  public List<XYZAxisAlignedBB> getCollidingBoundingBoxes(XYZAxisAlignedBB bb);
+  public List<XYZBoundingBox> getCollidingBoundingBoxes(XYZBoundingBox bb);
 
-  public boolean hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB bb);
+  public boolean hasAnyCollidingBoundingBoxes(XYZBoundingBox bb);
 }

@@ -12,38 +12,38 @@ public class Collidables {
 
   public static final IDualCollidable empty = new IDualCollidable() {
     @Override
-    public List<XYZAxisAlignedBB> getCollidingBoundingBoxes(XYZAxisAlignedBB bb) { return new ArrayList<>(); }
+    public List<XYZBoundingBox> getCollidingBoundingBoxes(XYZBoundingBox bb) { return new ArrayList<>(); }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB bb) { return false; }
+    public boolean hasAnyCollidingBoundingBoxes(XYZBoundingBox bb) { return false; }
 
     @Override
-    public List<XZAxisAlignedBB> getHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB bb) { return new ArrayList<>(); }
+    public List<XZBoundingBox> getHorizontallyCollidingBoundingBoxes(XZBoundingBox bb) { return new ArrayList<>(); }
 
     @Override
-    public boolean hasAnyHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB bb) { return false; }
+    public boolean hasAnyHorizontallyCollidingBoundingBoxes(XZBoundingBox bb) { return false; }
   };
   public static final IDualCollidable full = new IDualCollidable() {
     @Override
-    public List<XYZAxisAlignedBB> getCollidingBoundingBoxes(XYZAxisAlignedBB bb) {
-      List<XYZAxisAlignedBB> list = new ArrayList<>(1);
-      list.add(new XYZAxisAlignedBB(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
+    public List<XYZBoundingBox> getCollidingBoundingBoxes(XYZBoundingBox bb) {
+      List<XYZBoundingBox> list = new ArrayList<>(1);
+      list.add(new XYZBoundingBox(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
           Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
       return list;
     }
 
     @Override
-    public boolean hasAnyCollidingBoundingBoxes(XYZAxisAlignedBB bb) { return true; }
+    public boolean hasAnyCollidingBoundingBoxes(XYZBoundingBox bb) { return true; }
 
     @Override
-    public List<XZAxisAlignedBB> getHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB bb) {
-      List<XZAxisAlignedBB> list = new ArrayList<>(1);
-      list.add(new XZAxisAlignedBB(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+    public List<XZBoundingBox> getHorizontallyCollidingBoundingBoxes(XZBoundingBox bb) {
+      List<XZBoundingBox> list = new ArrayList<>(1);
+      list.add(new XZBoundingBox(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
           Double.POSITIVE_INFINITY));
       return list;
     }
 
     @Override
-    public boolean hasAnyHorizontallyCollidingBoundingBoxes(XZAxisAlignedBB bb) { return true; }
+    public boolean hasAnyHorizontallyCollidingBoundingBoxes(XZBoundingBox bb) { return true; }
   };
 }

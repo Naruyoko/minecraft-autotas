@@ -27,7 +27,7 @@ public class XYZAxisAlignedBB extends XZAxisAlignedBB {
 
   /**
    * In-place version of {net.minecraft.util.AxisAlignedBB.offset(double, double,
-   * double)} See also: {@link XYZAxisAlignedBB.offset}
+   * double)} See also: {@link XYZBoundingBox.offset}
    * 
    * @param x
    * @param y
