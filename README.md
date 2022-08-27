@@ -21,3 +21,7 @@ Contains simulators of Minecraft physics. Different versions can not be mixed. S
 ### v1_8_9
 
 Written based on Forge 1.8.9-11.15.1.2318-1.8.9 with stable_20 mapping.
+
+### v1_14
+
+Written based on 1.14 with `net.fabricmc:yarn:1.14+build.21` mapping.
