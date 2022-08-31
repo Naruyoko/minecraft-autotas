@@ -1,0 +1,211 @@
+How Minecraft 1.14 handles player movements
+
+this[ClientPlayerEntity].tick()
+  super[PlayerEntity].tick()
+    this[ClientPlayerEntity].updateInWater()
+      super[PlayerEntity].updateInWater()
+        this[Entity].isInFluid(FluidTags.WATER, true) (Tag<Fluid>, boolean)
+        [Update isInWater]
+    super[LivingEntity].tick()
+      super[Entity].tick()
+        this[LivingEntity].baseTick()
+          super[Entity].baseTick()
+            this[Entity].method_5876()
+              this[Entity].method_5713()
+              this[Entity].method_5630()
+                this[Entity].isInFluid(FluidTags.WATER, true) (Tag<Fluid>, boolean)
+                [Update field_6000]
+              this[PlayerEntity].updateSwimming()
+                this[Entity].updateSwimming()
+                  [Update isSwimming]
+            [Server side: Tick fire]
+            [Handle lava]
+            [Handle void death]
+          [Suffocate by wall]
+          [Extinguish if fire immune]
+          [Handle oxygen and drowning]
+          [Server side: Apply frost walker]
+      this[LivingEntity].method_6076()
+        [Handle item usage]
+      [Server side: Update attribute modifiers from equipments]
+      this[ClientPlayerEntity].tickMovement()
+        [Update field_3935, used for double tapping forwards key to active sprinting]
+        this[ClientPlayerEntity].isInSneakingPose()
+          [Decide if the player should be in sneaking pose]
+        this[Entity].shouldLeaveSwimmingPose()
+          [Decide if currently in swimming pose but is no longer in water]
+        this.input[KeyboardInput].tick(boolean, boolean)
+          [Poll inputs and update the input's properties]
+        [Scale input's movement properties when using an item]
+        [Read and reset field_3934 and perform auto jump]
+        this[ClientPlayerEntity].pushOutOfBlocks(double, double, double)
+          [Push out of block if inside it, overwriting velocity]
+        [Update sprinting from food, double tapping, sprint key, forward key release, horizontal collision, and collision with water]
+        this[ClientPlayerEntity].setSprinting(boolean)
+          super[LivingEntity].setSprinting(boolean)
+            super[Entity].setSprinting(boolean)
+              [Update sprinting flag]
+            [Add or remove sprinting speed boost]
+        [Toggle flying]
+        [Send opening elytra to server]
+        this[LivingEntity].method_6093() if insideWater and sneaking key held
+          [Accelerate downward]
+        [Fly up or down]
+        [Handle jumping when riding a horse]
+        super[PlayerEntity].tickMovement()
+          [Decrement field_7489, used for flying toggle]
+          [Heal if peaceful]
+          super[LivingEntity].tickMovement()
+            [Decrement field_6228, used for cool down of consecutive jumps if jump key is held]
+            [Set components of velocity below 0.003 to 0]
+            this[ClientPlayerEntity].tickNewAi()
+              [Update sidewaysSpeed, forwardSpeed, and jumping from the inputs]
+            [Handle jumping or swimming up]
+              this[LivingEntity].jump()
+                [Apply jump velocity and sprint-jumping boost]
+              this[LivingEntity].swimUpward(Tag<Fluid>)
+                [Accelerate upward]
+            [Scale sidewaysSpeed and forwardSpeed by 0.98]
+            this[LivingEntity].initAi()
+              [Server side: Damage elytra]
+            this[PlayerEntity].travel(new Vec3d(this.sidewaysSpeed, this.upwardSpeed, this.forwardSpeed)) (Vec3d)
+              [Regress y-velocity to a target if swimming]
+              super[LivingEntity].travel(vec3d) (Vec3d) with further processing if flying
+                [Calculate gravity, possibly affected by slow falling effect]
+                [In-water physics: if insideWater and not flying]
+                  [Calculate drag f and acceleration factor g from depth strider and dolphins grace]
+                  this[Entity].updateVelocity(g, vec3d) (float, Vec3d)
+                  this[ClientPlayerEntity].move(MovementType.SELF, this.getVelocity()) (MovementType, Vec3d)
+                  [Set y-velocity to 0.2 if collided horizontally and this[LivingEntity].isClimbing()]
+                  [Drag: Scale horizontal velocity by f and y-velocity by 0.8]
+                  [Handle gravity with reduced effect]
+                  [Slow stepping?]
+                [In-lava physics: if inLava and not flying]
+                  this[Entity].updateVelocity(0.02f, vec3d) (float, Vec3d)
+                  this[ClientPlayerEntity].move(MovementType.SELF, this.getVelocity()) (MovementType, Vec3d)
+                  [Drag: Scale velocity by 0.5]
+                  [Handle gravity with reduced effect]
+                  [Slow stepping?]
+                [Elytra physics: if isFallFlying]
+                  [Calculate new velocity]
+                  this[ClientPlayerEntity].move(MovementType.SELF, this.getVelocity()) (MovementType, Vec3d)
+                  [Damage when crashed into a wall]
+                  [Server side: End flying on landing]
+                [Normal physics: otherwise]
+                  [Calculate (ground) acceleration factor p and drag f from slipperiness (if on ground) and whether on ground, some related calculation is done in method_18802]
+                  this[Entity].updateVelocity(this[LivingEntity].method_18802(p), vec3d) (float, Vec3d)
+                  this[ClientPlayerEntity].move(MovementType.SELF, this.getVelocity()) (MovementType, Vec3d)
+                  [Set y-velocity to 0.2 if collided horizontally or jump key is held and this[LivingEntity].isClimbing()]
+                  [Apply drag f, except y-velocity has set drag factor 0.98 and affected by levitation]
+            this[LivingEntity].tickPushing()
+              [Handle entity pushing and cramming]
+          [Update field_6281, used for acceleration in air]
+          [Update movementSpeed, used for acceleration on ground]
+          [Handle special entity collisions]
+        [End flying on landing]
+    [Extinguish if invulnerable]
+    [Clamp horizontal positions by +/-29999999]
+    this[PlayerEntity].updateTurtleHelmet()
+      this[Entity].isInFluid(FluidTags.WATER) (Tag<Fluid>)
+      [Grant water breathing if not in water]
+    this[PlayerEntity].updateSize()
+      [Updates pose]
+  [Send movement information to server]
+
+
+this[Entity].method_5713()
+  this[Entity].updateMovementInFluid(FluidTags.WATER) (Tag<Fluid>)
+    [Checks all overlapping blocks]
+    [Push by water currents (onto velocity)]
+    [Update waterHeight]
+  [Update insideWater]
+  [Extinguish if inside water]
+
+this[Entity].updateVelocity(float, Vec3d)
+  Entity.movementInputToVelocity(vec3d, f, this.yaw) (Vec3d, float, float)
+    [Calculates acceleration vector from the vector (movement inputs), scaled and rotated]
+  [Adds acceleration to velocity]
+
+this[ClientPlayerEntity].move(MovementType, Vec3d)
+  super[Entity].move(MovementType, Vec3d)
+    [Read and reset movementMultiplier, scale the movement vector by it and reset velocity if set]
+    this[Entity].clipSneakingMovement(Vec3d, MovementType)
+      [Process the input velocity vector by clipping it so the player would stay above a block if on ground and sneaking]
+    this[Entity].method_17835(Vec3d)
+      [Calculates the final movement]
+      [Calculates LoopingStream<VoxelShape>, containing the world border and solid entity collisions]
+      Entity.method_17833(Vec3d, BoundingBox, ViewableWorld, EntityContext, LoopingStream<VoxelShape>), potentially called multiple times if the initial path collides horizontally and onGround or moving downwards, in which case the result that traveled horizontaly the furthest is picked
+        [Calculate final y movement and offset the bounding box]
+        [Calculate final x and z movement and offset the bounding box after each calculation, z first if input movement for z is larger than x]
+        VoxelShapes.method_17945(Axis, BoundingBox, ViewableWorld, double, EntityContext, Stream<VoxelShape>)
+          VoxelShapes.method_17944(BoundingBox, ViewableWorld, double, EntityContext, AxisCycleDirection, Stream<VoxelShape>)
+            [Return 0 for movement less than 1.0E-7]
+            [Calculate the boundaries of blocks touched by the bounding box, with extra 1.0E-7 inside floor()s and +/-1 outside to account for collisions bigger than a full block]
+            [Loop through block positions; the axis are ordered from outermost loop as X->Y->Z rotated so the handled axis is the outermost loop which is in direction of closer-to-further, while the 2 inner loops is in increasing order]
+              [Skip if at a corner, i.e. at a boundary for all 3 axis]
+              [Get block position]
+              blockState[BlockState].method_17900()
+                [Returns whether or not the block's collision protrudes outside [0,1]^3]
+              [Skip if the block fits inside a full block and at boundary for exactly 1 axis]
+              blockState[BlockState].getCollisionShape(BlockView, BlockPos, EntityContext)
+                this.getBlock()[Block].getCollisionShape(BlockState, BlockView, BlockPos, EntityContext)
+                  [Returns VoxelShape describing the collision, overridden by many subclasses, not offset]
+                this.getBlock()[Block].getCollisionShape(BlockState, BlockView, BlockPos, EntityContext)[VoxelShape].method_1108(Axis, BoundingBox, double), bounding box's coordinates subtracted by the block's position
+              [Returns 0 if movement became less than 1.0E-7]
+              [Update the ending boundary in the processing direction]
+            voxelShape[VoxelShape].method_1108(Axis, BoundingBox, double) over the elements of the stream
+    this[Entity].moveToBoundingBoxCenter()
+      [Update x, y, and z from the bounding box]
+    [Get block to call fall(), onEntityLand(), and onSteppedOn() on, which is taken from 0.2 blocks below, or possibly a block below if it was air above fence, wall, or fence gate]
+    [Update horizontalCollision, verticalCollision, onGround, and collided]
+    this[LivingEntity].fall(double, boolean, BlockState, BlockPos)
+      this[Entity].method_5713() if not insideWater
+      this[Entity].fall(double, boolean, BlockState, BlockPos)
+        blockState[BlockState].getBlock()[Block].onLandedUpon(World, BlockPos, Entity, float) if onGround and fallDistance>0
+          [Handle fall damage, as well as destroying farmlands and turtle eggs]
+        [Update fallDistance]
+    [Compare velocities after sneak clipping and collisions and cancel either X or Z component of velocity that the two were different, Z taking precedence]
+    block2[Block].onEntityLand(World, Entity) if Y velocities are different after sneak clipipng and collisions
+      [Cancel the Y velocity, or bounce it back for beds and slimes]
+    block2[Block].onSteppedOn(World, BlockPos, Entity) if onGround and not sneaking
+      [Handle magma damage, redstone ore touch glow, slime block's horizontal slow-down, and turtle eggs destruction]
+    [Reset isLava]
+    this[Entity].checkBlockCollision()
+      [Calculate the boundaries of blocks touched, shrunk by 0.001 in each direction]
+      [Loop through block positions]
+        [Get block]
+        blockState[BlockState].onEntityCollision(this.world, pooledMutable3, this) (World, BlockPos, Entity)
+          this[BlockState].getBlock()[Block].onEntityCollision(this, world, blockPos, entity) (BlockState, World, BlockPos, Entity)
+            [Update preassure plate and tripwire; handle bubble column's push; damage from cactus, campfire, and sweet berry; extinguish fire by water in cauldron; call slowMovement from cobweb, soul sand, and sweet berry; set inLava for lava; and apply wither effect from wither rose]
+        this[Entity].onBlockCollision(blockState);
+    [Set on fire, extinguish by water or rain, and update fireTicks]
+  this[ClientPlayerEntity].method_3148(float, float)
+    [Do bunch of tests and set field_3934, used for auto jumping]
+
+VoxelShape seems to be a structure of X, Y, and Z points that define a grid (by lists for ArrayVoxelShape and generated for OffsetVoxelShape and SimpleVoxelShape) and a bit set representing tangibility for each cell (held by a VoxelSet, usually BitSetVoxelSet)
+
+this[VoxelShape].method_1108(Axis, BoundingBox, double)
+  this[VoxelShape].method_1103(AxisCycleDirection, BoundingBox, double)
+    [Return given movement if empty]
+    [Return 0 for movement less than 1.0E-7]
+    [Calculate the boundaries of voxels touched by the bounding box, with 1.0E-7 shaved off, but go all the way in the direction of the movement]
+    [Loop through voxels; the axis are ordered from outermost loop as X->Y->Z rotated so the handled axis is the outermost loop which is in direction of closer-to-further, while the 2 inner loops is in increasing order]
+      this[VoxelShape].getCoordIndex(Axis, int)
+        [Get maximum index of coordinate along the axis less than or equal the given coordinate]
+      this[VoxelShape].getCoord(Axis, int)
+        [Gets the coordinate of the grid in the direction of the axis]
+      this.voxels[VoxelSet].inBoundsAndContains(axisCycleDirection2, p, q, r) (AxisCycleDirection, int, int, int)
+        [Returns if voxel identified by (p,q,r) is within bounds of the VoxelSet and filled]
+      [If solid, take the mininum of the movement given and the distance to the coordinate seen and return it]
+    [Return the given movement if none were solid]
+
+this[LivingEntity].isClimbing()
+  [Retrieve block at position and returns true if it is ladder, vine, scaffolding, or closed trapdoor with ladder facing the same way under it]
+
+this[Entity].isInFluid(Tag<Fluid>)
+  this[Entity].isInFluid(Tag<Fluid>, boolean)
+    [Retrieve block at eye height, boolean enables the check for chunk loading]
+
+this[PlayerEntity].slowMovement(BlockState, Vec3d)
+  this[Entity].slowMovement(BlockState, Vec3d)
+    [Updates movementMultiplier, set by cobwebs and sweetberries]
