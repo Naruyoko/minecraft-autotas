@@ -56,10 +56,10 @@ public class BlockLiquid extends PassableBlock {
     double flowX = 0.0D;
     double flowY = 0.0D;
     double flowZ = 0.0D;
-    final EnumFacing[] facings = EnumFacing.Plane.HORIZONTAL.asArray();
+    final Direction[] facings = Direction.Type.HORIZONTAL.asArray();
     final int[] adjacentLevels = new int[] { northLevel, eastLevel, southLevel, westLevel };
     for (int i = 0; i < 4; i++) {
-      EnumFacing facing = facings[i];
+      Direction facing = facings[i];
       int adjacentLevel = adjacentLevels[i];
       if (adjacentLevel >= 0) {
         int levelDifference = adjacentLevel - effectiveFlowDecay;

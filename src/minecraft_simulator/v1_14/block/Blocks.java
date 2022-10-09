@@ -85,7 +85,7 @@ public class Blocks {
   public static final Block chestConnectsEast = chestNegXSide;
 
   // See {net.minecraft.block.BlockCocoa}
-  public static Block cocoa(EnumFacing facing, int age) {
+  public static Block cocoa(Direction facing, int age) {
     final int widthPixels = 4 + age * 2;
     final int heightPixels = 5 + age * 2;
     final float halfWidth = (float)widthPixels / 2.0F;
@@ -121,21 +121,21 @@ public class Blocks {
   public static final Block cocoaEast1;
   public static final Block cocoaEast2;
   static {
-    for (EnumFacing facing : EnumFacing.HORIZONTALS)
+    for (Direction facing : Direction.HORIZONTAL)
       for (int age = 0; age < 3; age++)
-        cocoas[facing.horizontalIndex | age << 2] = cocoa(facing, age);
-    cocoaSouth0 = cocoas[EnumFacing.SOUTH.horizontalIndex | 0 << 2];
-    cocoaSouth1 = cocoas[EnumFacing.SOUTH.horizontalIndex | 1 << 2];
-    cocoaSouth2 = cocoas[EnumFacing.SOUTH.horizontalIndex | 2 << 2];
-    cocoaNorth0 = cocoas[EnumFacing.NORTH.horizontalIndex | 0 << 2];
-    cocoaNorth1 = cocoas[EnumFacing.NORTH.horizontalIndex | 1 << 2];
-    cocoaNorth2 = cocoas[EnumFacing.NORTH.horizontalIndex | 2 << 2];
-    cocoaWest0 = cocoas[EnumFacing.WEST.horizontalIndex | 0 << 2];
-    cocoaWest1 = cocoas[EnumFacing.WEST.horizontalIndex | 1 << 2];
-    cocoaWest2 = cocoas[EnumFacing.WEST.horizontalIndex | 2 << 2];
-    cocoaEast0 = cocoas[EnumFacing.EAST.horizontalIndex | 0 << 2];
-    cocoaEast1 = cocoas[EnumFacing.EAST.horizontalIndex | 1 << 2];
-    cocoaEast2 = cocoas[EnumFacing.EAST.horizontalIndex | 2 << 2];
+        cocoas[facing.idHorizontal | age << 2] = cocoa(facing, age);
+    cocoaSouth0 = cocoas[Direction.SOUTH.idHorizontal | 0 << 2];
+    cocoaSouth1 = cocoas[Direction.SOUTH.idHorizontal | 1 << 2];
+    cocoaSouth2 = cocoas[Direction.SOUTH.idHorizontal | 2 << 2];
+    cocoaNorth0 = cocoas[Direction.NORTH.idHorizontal | 0 << 2];
+    cocoaNorth1 = cocoas[Direction.NORTH.idHorizontal | 1 << 2];
+    cocoaNorth2 = cocoas[Direction.NORTH.idHorizontal | 2 << 2];
+    cocoaWest0 = cocoas[Direction.WEST.idHorizontal | 0 << 2];
+    cocoaWest1 = cocoas[Direction.WEST.idHorizontal | 1 << 2];
+    cocoaWest2 = cocoas[Direction.WEST.idHorizontal | 2 << 2];
+    cocoaEast0 = cocoas[Direction.EAST.idHorizontal | 0 << 2];
+    cocoaEast1 = cocoas[Direction.EAST.idHorizontal | 1 << 2];
+    cocoaEast2 = cocoas[Direction.EAST.idHorizontal | 2 << 2];
   }
 
   // See {net.minecraft.block.BlockCuctus}
@@ -215,7 +215,7 @@ public class Blocks {
   public static final Block daylightDetector = new Block(0.0F, 0.0F, 0.0F, 1.0F, 0.375F, 1.0F);
 
   // See {net.minecraft.block.BlockDoor}
-  public static Block door(EnumFacing facing) {
+  public static Block door(Direction facing) {
     final float thickness = 0.1875F;
     switch (facing) {
     case EAST:
@@ -237,12 +237,12 @@ public class Blocks {
   public static final Block doorWest;
   public static final Block doorNorth;
   static {
-    for (EnumFacing facing : EnumFacing.HORIZONTALS)
-      doors[facing.horizontalIndex] = door(facing);
-    doorEast = doors[EnumFacing.EAST.horizontalIndex];
-    doorSouth = doors[EnumFacing.SOUTH.horizontalIndex];
-    doorWest = doors[EnumFacing.WEST.horizontalIndex];
-    doorNorth = doors[EnumFacing.NORTH.horizontalIndex];
+    for (Direction facing : Direction.HORIZONTAL)
+      doors[facing.idHorizontal] = door(facing);
+    doorEast = doors[Direction.EAST.idHorizontal];
+    doorSouth = doors[Direction.SOUTH.idHorizontal];
+    doorWest = doors[Direction.WEST.idHorizontal];
+    doorNorth = doors[Direction.NORTH.idHorizontal];
   }
   // See {net.minecraft.block.BlockDragonEgg}
   public static final Block dragonEgg = new Block(0.0625F, 0.0F, 0.0625F, 0.9375F, 1.0F, 0.9375F);
@@ -460,7 +460,7 @@ public class Blocks {
   }
 
   // See {net.minecraft.block.BlockLadder}
-  public static Block ladder(EnumFacing facing) {
+  public static Block ladder(Direction facing) {
     final float thickness = 0.125F;
     Block block;
     switch (facing) {
@@ -484,12 +484,12 @@ public class Blocks {
   public static final Block ladderWest;
   public static final Block ladderEast;
   static {
-    for (EnumFacing facing : EnumFacing.HORIZONTALS)
-      ladders[facing.horizontalIndex] = ladder(facing);
-    ladderNorth = ladders[EnumFacing.NORTH.horizontalIndex];
-    ladderSouth = ladders[EnumFacing.SOUTH.horizontalIndex];
-    ladderWest = ladders[EnumFacing.WEST.horizontalIndex];
-    ladderEast = ladders[EnumFacing.EAST.horizontalIndex];
+    for (Direction facing : Direction.HORIZONTAL)
+      ladders[facing.idHorizontal] = ladder(facing);
+    ladderNorth = ladders[Direction.NORTH.idHorizontal];
+    ladderSouth = ladders[Direction.SOUTH.idHorizontal];
+    ladderWest = ladders[Direction.WEST.idHorizontal];
+    ladderEast = ladders[Direction.EAST.idHorizontal];
   }
   // See {net.minecraft.block.BlockSlime}
   public static final Block slime = new Block() {

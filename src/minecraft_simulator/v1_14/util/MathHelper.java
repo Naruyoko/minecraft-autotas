@@ -1,5 +1,7 @@
 package minecraft_simulator.v1_14.util;
 
+import java.util.function.IntPredicate;
+
 /**
  * See {net.minecraft.util.MathHelper}
  */
@@ -29,5 +31,20 @@ public class MathHelper {
 
   public static double clamp_double(double num, double min, double max) {
     return num < min ? min : num > max ? max : num;
+  }
+
+  public static int binarySearch(int i, int j, IntPredicate intPredicate) {
+    int k = j - i;
+    while (k > 0) {
+      int l = k / 2;
+      int m = i + l;
+      if (intPredicate.test(m)) {
+        k = l;
+      } else {
+        i = m + 1;
+        k -= l + 1;
+      }
+    }
+    return i;
   }
 }
