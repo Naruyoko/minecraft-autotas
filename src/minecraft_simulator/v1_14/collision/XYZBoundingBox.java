@@ -1,5 +1,7 @@
 package minecraft_simulator.v1_14.collision;
 
+import minecraft_simulator.v1_14.block.Direction;
+
 /**
  * A mutable version of {net.minecraft.util.math.BoundingBox}
  */
@@ -28,6 +30,22 @@ public class XYZBoundingBox extends XZBoundingBox {
     target.maxZ = source.maxZ;
     return target;
   }
+
+  /**
+   * See {net.minecraft.util.math.BoundingBox.getMin(Axis)}
+   * 
+   * @param axis
+   * @return Lower bound along the given axis
+   */
+  public double getMin(Direction.Axis axis) { return axis.choose(this.minX, this.minY, this.minZ); }
+
+  /**
+   * See {net.minecraft.util.math.BoundingBox.getMax(Axis)}
+   * 
+   * @param axis
+   * @return Upper bound along the given axis
+   */
+  public double getMax(Direction.Axis axis) { return axis.choose(this.maxX, this.maxY, this.maxZ); }
 
   /**
    * In-place version of {net.minecraft.util.math.BoundingBox.offset(double,
