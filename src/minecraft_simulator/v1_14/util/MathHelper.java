@@ -5,7 +5,6 @@ import java.util.function.IntPredicate;
 /**
  * See {net.minecraft.util.MathHelper}
  */
-//TODO: update
 public class MathHelper {
   // Required for accurate physics simulation
   // See https://www.mcpk.wiki/wiki/Angles
@@ -20,18 +19,16 @@ public class MathHelper {
 
   public static float cos(float value) { return SIN_TABLE[(int)(value * 10430.378F + 16384F) & 65535]; }
 
-  public static float sqrt_double(double value) { return (float)Math.sqrt(value); }
+  public static float sqrt(double value) { return (float)Math.sqrt(value); }
 
-  public static float sqrt_float(float value) { return (float)Math.sqrt((double)value); }
+  public static float sqrt(float value) { return (float)Math.sqrt((double)value); }
 
-  public static int floor_double(double value) {
-    int i = (int)value;
-    return value < (double)i ? i - 1 : i;
+  public static int floor(double d) {
+    int i = (int)d;
+    return d < (double)i ? i - 1 : i;
   }
 
-  public static double clamp_double(double num, double min, double max) {
-    return num < min ? min : num > max ? max : num;
-  }
+  public static int clamp(int num, int min, int max) { return num < min ? min : num > max ? max : num; }
 
   public static int binarySearch(int i, int j, IntPredicate intPredicate) {
     int k = j - i;

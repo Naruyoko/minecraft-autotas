@@ -173,20 +173,20 @@ public class XYZMoveEntityHandlerFromBlockGrid implements IXYZMoveEntityHandler<
     if (zNoBlock != z)
       player.velZ = 0.0D;
     if (!isSneaking || yNoBlock != y) {
-      Block blockBelow = blockGrid.getBlockAt(MathHelper.floor_double(player.posX),
-          MathHelper.floor_double(player.posY - 0.20000000298023224D), MathHelper.floor_double(player.posZ));
+      Block blockBelow = blockGrid.getBlockAt(MathHelper.floor(player.posX),
+          MathHelper.floor(player.posY - 0.20000000298023224D), MathHelper.floor(player.posZ));
       if (yNoBlock != y)
         blockBelow.onLanded(player, flagsIn, flagsOut);
       if (!isSneaking)
         blockBelow.onEntityCollidedWithBlockGround(player, flagsIn, flagsOut);
     }
     //Call to {net.minecraft.entity.Entity.doBlockCollisions()}
-    final int minX = MathHelper.floor_double(player.boundingBox.minX + 0.001D);
-    final int maxX = MathHelper.floor_double(player.boundingBox.maxX - 0.001D);
-    final int minY = MathHelper.floor_double(player.boundingBox.minY + 0.001D);
-    final int maxY = MathHelper.floor_double(player.boundingBox.maxY - 0.001D);
-    final int minZ = MathHelper.floor_double(player.boundingBox.minZ + 0.001D);
-    final int maxZ = MathHelper.floor_double(player.boundingBox.maxZ - 0.001D);
+    final int minX = MathHelper.floor(player.boundingBox.minX + 0.001D);
+    final int maxX = MathHelper.floor(player.boundingBox.maxX - 0.001D);
+    final int minY = MathHelper.floor(player.boundingBox.minY + 0.001D);
+    final int maxY = MathHelper.floor(player.boundingBox.maxY - 0.001D);
+    final int minZ = MathHelper.floor(player.boundingBox.minZ + 0.001D);
+    final int maxZ = MathHelper.floor(player.boundingBox.maxZ - 0.001D);
     for (int bx = minX; bx <= maxX; ++bx) {
       for (int by = minY; by <= maxY; ++by) {
         for (int bz = minZ; bz <= maxZ; ++bz) {

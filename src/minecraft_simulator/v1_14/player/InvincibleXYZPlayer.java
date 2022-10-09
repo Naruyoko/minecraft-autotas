@@ -217,12 +217,12 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
   public void handleWaterMovement(AbstractXYZBlockGrid blockGrid) {
     inWater = false;
     final XYZBoundingBox bb = boundingBox.expandAndContract(0.0D, -0.4000000059604645D, 0.0D, 0.001D, 0.001D, 0.001D);
-    final int minX = MathHelper.floor_double(bb.minX);
-    final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-    final int minY = MathHelper.floor_double(bb.minY);
-    final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-    final int minZ = MathHelper.floor_double(bb.minZ);
-    final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+    final int minX = MathHelper.floor(bb.minX);
+    final int maxX = MathHelper.floor(bb.maxX + 1.0D);
+    final int minY = MathHelper.floor(bb.minY);
+    final int maxY = MathHelper.floor(bb.maxY + 1.0D);
+    final int minZ = MathHelper.floor(bb.minZ);
+    final int maxZ = MathHelper.floor(bb.maxZ + 1.0D);
     double pushX = 0.0D;
     double pushY = 0.0D;
     double pushZ = 0.0D;
@@ -242,7 +242,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
         }
       }
     }
-    double pushMag = (double)MathHelper.sqrt_double(pushX * pushX + pushY * pushY + pushZ * pushZ);
+    double pushMag = (double)MathHelper.sqrt(pushX * pushX + pushY * pushY + pushZ * pushZ);
     if (pushMag > 0.0D) {
       if (pushMag < 1.0E-4D) {
         pushX = pushY = pushZ = 0.0D;
@@ -262,12 +262,12 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
    */
   private boolean isInLava(AbstractXYZBlockGrid blockGrid) {
     final XYZBoundingBox bb = boundingBox.expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D);
-    final int minX = MathHelper.floor_double(bb.minX);
-    final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-    final int minY = MathHelper.floor_double(bb.minY);
-    final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-    final int minZ = MathHelper.floor_double(bb.minZ);
-    final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+    final int minX = MathHelper.floor(bb.minX);
+    final int maxX = MathHelper.floor(bb.maxX + 1.0D);
+    final int minY = MathHelper.floor(bb.minY);
+    final int maxY = MathHelper.floor(bb.maxY + 1.0D);
+    final int minZ = MathHelper.floor(bb.minZ);
+    final int maxZ = MathHelper.floor(bb.maxZ + 1.0D);
     for (int x = minX; x < maxX; x++) {
       for (int y = minY; y < maxY; y++) {
         for (int z = minZ; z < maxZ; z++) {
@@ -288,12 +288,12 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
       double offsetZ) {
     final XYZBoundingBox bb = boundingBox.offset(offsetX, offsetY, offsetZ);
     if (!blockGrid.hasAnyCollidingBoundingBoxes(bb)) {
-      final int minX = MathHelper.floor_double(bb.minX);
-      final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-      final int minY = MathHelper.floor_double(bb.minY);
-      final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-      final int minZ = MathHelper.floor_double(bb.minZ);
-      final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+      final int minX = MathHelper.floor(bb.minX);
+      final int maxX = MathHelper.floor(bb.maxX + 1.0D);
+      final int minY = MathHelper.floor(bb.minY);
+      final int maxY = MathHelper.floor(bb.maxY + 1.0D);
+      final int minZ = MathHelper.floor(bb.minZ);
+      final int maxZ = MathHelper.floor(bb.maxZ + 1.0D);
       for (int x = minX; x < maxX; x++) {
         for (int y = minY; y < maxY; y++) {
           for (int z = minZ; z < maxZ; z++) {
@@ -311,12 +311,12 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
    */
   private boolean isOnLadder(AbstractXYZBlockGrid blockGrid) {
     final XYZBoundingBox bb = boundingBox;
-    final int minX = MathHelper.floor_double(bb.minX);
-    final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-    final int minY = MathHelper.floor_double(bb.minY);
-    final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-    final int minZ = MathHelper.floor_double(bb.minZ);
-    final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+    final int minX = MathHelper.floor(bb.minX);
+    final int maxX = MathHelper.floor(bb.maxX + 1.0D);
+    final int minY = MathHelper.floor(bb.minY);
+    final int maxY = MathHelper.floor(bb.maxY + 1.0D);
+    final int minZ = MathHelper.floor(bb.minZ);
+    final int maxZ = MathHelper.floor(bb.maxZ + 1.0D);
     for (int x = minX; x < maxX; x++) {
       for (int y = minY; y < maxY; y++) {
         for (int z = minZ; z < maxZ; z++) {
@@ -427,7 +427,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
       // Call to {net.minecraft.entity.Entity.moveFlying(float, float, float)}
       float movementDistance = moveStrafing * moveStrafing + moveForward * moveForward;
       if (movementDistance >= 1E-4F) {
-        movementDistance = MathHelper.sqrt_float(movementDistance);
+        movementDistance = MathHelper.sqrt(movementDistance);
         if (movementDistance < 1F)
           movementDistance = 1F;
         movementDistance = friction / movementDistance;
@@ -452,7 +452,7 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
       // Call to {net.minecraft.entity.Entity.moveFlying(float, float, float)}
       float movementDistance = moveStrafing * moveStrafing + moveForward * moveForward;
       if (movementDistance >= 1E-4F) {
-        movementDistance = MathHelper.sqrt_float(movementDistance);
+        movementDistance = MathHelper.sqrt(movementDistance);
         if (movementDistance < 1F)
           movementDistance = 1F;
         movementDistance = 0.02F / movementDistance;
@@ -475,13 +475,13 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
         velY = 0.30000001192092896D;
     } else {
       final float friction = onGround
-          ? cachedMovementSpeedFloat * blockGrid.getBlockAt(MathHelper.floor_double(posX),
-              MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)).friction_intermediate
+          ? cachedMovementSpeedFloat * blockGrid.getBlockAt(MathHelper.floor(posX),
+              MathHelper.floor(boundingBox.minY) - 1, MathHelper.floor(posZ)).friction_intermediate
           : jumpMovementFactor;
       // Call to {net.minecraft.entity.Entity.moveFlying(float, float, float)}
       float movementDistance = moveStrafing * moveStrafing + moveForward * moveForward;
       if (movementDistance >= 1E-4F) {
-        movementDistance = MathHelper.sqrt_float(movementDistance);
+        movementDistance = MathHelper.sqrt(movementDistance);
         if (movementDistance < 1F)
           movementDistance = 1F;
         movementDistance = friction / movementDistance;
@@ -494,12 +494,12 @@ public class InvincibleXYZPlayer extends AbstractXYZPlayer implements IPushedByW
         velZ += (double)(forward * cosYaw + strafe * sinYaw);
       }
       // Return from moveFlying
-      final double XZdampFactor = onGround ? blockGrid.getBlockAt(MathHelper.floor_double(posX),
-          MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)).groundFriction : airFriction;
+      final double XZdampFactor = onGround ? blockGrid.getBlockAt(MathHelper.floor(posX),
+          MathHelper.floor(boundingBox.minY) - 1, MathHelper.floor(posZ)).groundFriction : airFriction;
       if (isOnLadder(blockGrid)) {
         final float ladderVelocityCap = 0.15F;
-        velX = MathHelper.clamp_double(velX, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
-        velZ = MathHelper.clamp_double(velZ, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
+        velX = MathHelper.clamp(velX, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
+        velZ = MathHelper.clamp(velZ, (double)(-ladderVelocityCap), (double)ladderVelocityCap);
         if (keySneak && velY < 0.0D)
           velY = 0.0D;
         else if (velY < -0.15D)

@@ -69,7 +69,7 @@ public class BlockLiquid extends PassableBlock {
       }
     }
     if (level >= 8) {
-      double flowMag = (double)MathHelper.sqrt_double(flowX * flowX + flowY * flowY + flowZ * flowZ);
+      double flowMag = (double)MathHelper.sqrt(flowX * flowX + flowY * flowY + flowZ * flowZ);
       if (flowMag < 1.0E-4D) {
         flowX = flowY = flowZ = 0.0D;
       } else {
@@ -79,7 +79,7 @@ public class BlockLiquid extends PassableBlock {
       }
       flowY = flowY + -6.0D;
     }
-    double flowMag = (double)MathHelper.sqrt_double(flowX * flowX + flowY * flowY + flowZ * flowZ);
+    double flowMag = (double)MathHelper.sqrt(flowX * flowX + flowY * flowY + flowZ * flowZ);
     if (flowMag < 1.0E-4D) {
       flowX = flowY = flowZ = 0.0D;
     } else {

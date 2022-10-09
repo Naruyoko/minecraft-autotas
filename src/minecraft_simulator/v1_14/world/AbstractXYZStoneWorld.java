@@ -24,12 +24,12 @@ public abstract class AbstractXYZStoneWorld implements IXYZMoveEntityHandler<Abs
    */
   public List<XYZBoundingBox> getCollidingBoundingBoxes(XYZBoundingBox bb) {
     final List<XYZBoundingBox> list = new ArrayList<>();
-    final int minX = MathHelper.floor_double(bb.minX);
-    final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-    final int minY = MathHelper.floor_double(bb.minY);
-    final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-    final int minZ = MathHelper.floor_double(bb.minZ);
-    final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+    final int minX = MathHelper.floor(bb.minX);
+    final int maxX = MathHelper.floor(bb.maxX + 1.0D);
+    final int minY = MathHelper.floor(bb.minY);
+    final int maxY = MathHelper.floor(bb.maxY + 1.0D);
+    final int minZ = MathHelper.floor(bb.minZ);
+    final int maxZ = MathHelper.floor(bb.maxZ + 1.0D);
     for (int x = minX; x < maxX; x++) {
       for (int z = minZ; z < maxZ; z++) {
         for (int y = minY - 1; y < maxY; y++) {
@@ -48,12 +48,12 @@ public abstract class AbstractXYZStoneWorld implements IXYZMoveEntityHandler<Abs
    * @return
    */
   public boolean hasAnyCollidingBoundingBoxes(XYZBoundingBox bb) {
-    final int minX = MathHelper.floor_double(bb.minX);
-    final int maxX = MathHelper.floor_double(bb.maxX + 1.0D);
-    final int minY = MathHelper.floor_double(bb.minY);
-    final int maxY = MathHelper.floor_double(bb.maxY + 1.0D);
-    final int minZ = MathHelper.floor_double(bb.minZ);
-    final int maxZ = MathHelper.floor_double(bb.maxZ + 1.0D);
+    final int minX = MathHelper.floor(bb.minX);
+    final int maxX = MathHelper.floor(bb.maxX + 1.0D);
+    final int minY = MathHelper.floor(bb.minY);
+    final int maxY = MathHelper.floor(bb.maxY + 1.0D);
+    final int minZ = MathHelper.floor(bb.minZ);
+    final int maxZ = MathHelper.floor(bb.maxZ + 1.0D);
     for (int x = minX; x < maxX; x++) {
       for (int z = minZ; z < maxZ; z++) {
         for (int y = minY - 1; y < maxY; y++) {
