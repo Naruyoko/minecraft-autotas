@@ -21,6 +21,7 @@ public class Block {
   public double groundFriction;
   public float friction_intermediate;
   public boolean isLadder;
+  public VoxelShape collisionShape; //TODO
 
   public Block(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
     setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
@@ -227,4 +228,9 @@ public class Block {
    */
   public void onEntityCollidedWithBlockIntersect(AbstractXYZPlayer player, SimulationFlagsIn flagsIn,
       SimulationFlagsOut flagsOut) {}
+
+  public boolean method_17900() {
+    //TODO 
+    return false;
+  }
 }

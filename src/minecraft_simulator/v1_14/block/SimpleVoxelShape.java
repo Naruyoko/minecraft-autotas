@@ -28,7 +28,7 @@ public class SimpleVoxelShape extends VoxelShape {
    * @param sectionCount
    * @return
    */
-  public static double[] emulateFractionalDoubleList(int sectionCount) {
+  protected static double[] emulateFractionalDoubleList(int sectionCount) {
     double[] r = new double[sectionCount + 1];
     for (int i = 0; i <= sectionCount; i++)
       r[i] = (double)i / (double)sectionCount;

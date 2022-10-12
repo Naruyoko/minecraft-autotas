@@ -2,6 +2,8 @@ package minecraft_simulator.v1_14.block;
 
 import java.util.BitSet;
 
+import minecraft_simulator.v1_14.util.BooleanBiFunction;
+
 /**
  * See {net.minecraft.util.shape.VoxelSet} and
  * {net.minecraft.util.shape.BitSetVoxelSet}
@@ -14,12 +16,20 @@ public class BitSetVoxelSet {
   final int ySize; // {net.minecraft.util.shape.VoxelSet.ySize}
   final int zSize; // {net.minecraft.util.shape.VoxelSet.zSize}
 
-  // See {net.minecraft.util.shape.BitSetVoxelSet.BitSetVoxelSet(int, int, int, int, int, int, int, int, int)}
-  public BitSetVoxelSet(int xSize, int ySize, int zSize) {
-    this.storage = new BitSet(xSize * ySize * zSize);
+  private BitSetVoxelSet(BitSet storage, int xSize, int ySize, int zSize) {
+    this.storage = storage;
     this.xSize = xSize;
     this.ySize = ySize;
     this.zSize = zSize;
+  }
+
+  // See {net.minecraft.util.shape.BitSetVoxelSet.BitSetVoxelSet(int, int, int, int, int, int, int, int, int)}
+  public BitSetVoxelSet(int xSize, int ySize, int zSize) {
+    this(new BitSet(xSize * ySize * zSize), xSize, ySize, zSize);
+  }
+
+  public BitSetVoxelSet(BitSetVoxelSet source) {
+    this((BitSet)source.storage.clone(), source.xSize, source.ySize, source.zSize);
   }
 
   // See {net.minecraft.util.shape.BitSetVoxelSet.getIndex(int, int, int)}
@@ -59,15 +69,92 @@ public class BitSetVoxelSet {
   }
 
   // See {net.minecraft.util.shape.BitSetVoxelSet.contains(int, int, int)}
-  public boolean contains(int i, int j, int k) { return this.storage.get(this.getIndex(i, j, k)); }
+  public boolean contains(int x, int y, int z) { return this.storage.get(this.getIndex(x, y, z)); }
 
   // See {net.minecraft.util.shape.BitSetVoxelSet.set(int, int, int, boolean)}
-  public void set(int i, int j, int k, boolean value) { this.storage.set(this.getIndex(i, j, k), value); }
+  public void set(int x, int y, int z, boolean value) { this.storage.set(this.getIndex(x, y, z), value); }
 
   // See {net.minecraft.util.shape.BitSetVoxelSet.isEmpty()}
   public boolean isEmpty() { return this.storage.isEmpty(); }
 
   // See {net.minecraft.util.shape.VoxelSet.getSize(Axis)}
   public int getSize(Direction.Axis axis) { return axis.choose(this.xSize, this.ySize, this.zSize); }
+
+  /**
+   * See {net.minecraft.util.shape.BitSetVoxelSet.isColumnFull(int, int, int,
+   * int)}
+   * 
+   * @param zStart
+   * @param zEnd
+   * @param x
+   * @param y
+   * @return
+   */
+  public boolean isColumnFull(int zStart, int zEnd, int x, int y) {
+    if (x < 0 || y < 0 || zStart < 0 || x >= this.xSize || y >= this.ySize || zEnd > this.zSize)
+      return false;
+
+    return this.storage.nextClearBit(this.getIndex(x, y, zStart)) >= this.getIndex(x, y, zEnd);
+  }
+
+  /**
+   * See {net.minecraft.util.shape.BitSetVoxelSet.setColumn(int, int, int, int,
+   * boolean)}
+   * 
+   * @param zStart
+   * @param zEnd
+   * @param x
+   * @param y
+   * @param value
+   */
+  public void setColumn(int zStart, int zEnd, int x, int y, boolean value) {
+    this.storage.set(this.getIndex(x, y, zStart), this.getIndex(x, y, zEnd), value);
+  }
+
+  /**
+   * See {net.minecraft.util.shape.VoxelSet.isRectangleFull(int, int, int, int,
+   * int)}
+   * 
+   * @param xStart
+   * @param xEnd
+   * @param zStart
+   * @param zEnd
+   * @param y
+   * @return
+   */
+  public boolean isRectangleFull(int xStart, int xEnd, int zStart, int zEnd, int y) {
+    for (int x = xStart; x < xEnd; ++x)
+      if (!this.isColumnFull(zStart, zEnd, x, y))
+        return false;
+    return true;
+  }
+
+  /**
+   * See {net.minecraft.util.shape.BitSetVoxelSet.combine(VoxelSet, VoxelSet,
+   * DoubleListPair, DoubleListPair, DoubleListPair, BooleanBiFunction)}
+   * 
+   * @param voxels1
+   * @param voxels2
+   * @param xPair
+   * @param yPair
+   * @param zPair
+   * @param combineFunction
+   * @return
+   */
+  public static BitSetVoxelSet combine(BitSetVoxelSet voxels1, BitSetVoxelSet voxels2, DoubleListPair xPair,
+      DoubleListPair yPair, DoubleListPair zPair, BooleanBiFunction combineFunction) {
+    int xSize = xPair.mergedList.length - 1;
+    int ySize = yPair.mergedList.length - 1;
+    int zSize = zPair.mergedList.length - 1;
+    BitSetVoxelSet voxelSet = new BitSetVoxelSet(xSize, ySize, zSize);
+    for (int x = 0; x < xSize; x++)
+      for (int y = 0; y < ySize; y++)
+        for (int z = 0; z < zSize; z++)
+          voxelSet.set(x, y, z,
+              combineFunction.apply(
+                  voxels1.inBoundsAndContains(xPair.indexes1[x], yPair.indexes1[y], zPair.indexes1[z]),
+                  voxels2.inBoundsAndContains(xPair.indexes2[x], yPair.indexes2[y], zPair.indexes2[z])));
+    return voxelSet;
+  }
 
 }

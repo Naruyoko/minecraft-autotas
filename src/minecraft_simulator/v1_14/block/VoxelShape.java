@@ -1,6 +1,7 @@
 package minecraft_simulator.v1_14.block;
 
 import minecraft_simulator.v1_14.collision.XYZBoundingBox;
+import minecraft_simulator.v1_14.util.BooleanBiFunction;
 import minecraft_simulator.v1_14.util.MathHelper;
 
 /**
@@ -55,6 +56,64 @@ public abstract class VoxelShape {
    * @return Whether this shape is empty
    */
   public boolean isEmpty() { return this.voxels.isEmpty(); }
+
+  private VoxelShape cuboidByIndex(int i, int j, int k, int l, int m, int n) {
+    return VoxelShapes.cuboid(this.getCoord(Direction.Axis.X, i), this.getCoord(Direction.Axis.Y, j),
+        this.getCoord(Direction.Axis.Z, k), this.getCoord(Direction.Axis.X, l), this.getCoord(Direction.Axis.Y, m),
+        this.getCoord(Direction.Axis.Z, n));
+  }
+
+  /**
+   * See {net.minecraft.util.shape.VoxelShape.simplify()} and
+   * {net.minecraft.util.shape.VoxelSet.forEachBox(class_253, boolean)}
+   * 
+   * @return A simplified shape
+   */
+  public VoxelShape simplify() {
+    VoxelShape simplifiedShape = VoxelShapes.EMPTY;
+    BitSetVoxelSet voxelSet = new BitSetVoxelSet(this.voxels);
+    for (int x = 0; x <= this.voxels.xSize; x++) {
+      for (int y = 0; y <= this.voxels.ySize; y++) {
+        int zStart = -1;
+        for (int z = 0; z <= this.voxels.zSize; z++) {
+          if (voxelSet.inBoundsAndContains(x, y, z)) {
+            if (zStart == -1)
+              zStart = z;
+            continue;
+          }
+          if (zStart == -1)
+            continue;
+          int xStart = x;
+          int xEnd = x;
+          int yStart = y;
+          int yEnd = y;
+          voxelSet.setColumn(zStart, z, x, y, false);
+          while (voxelSet.isColumnFull(zStart, z, xStart - 1, yStart)) {
+            voxelSet.setColumn(zStart, z, xStart - 1, yStart, false);
+            --xStart;
+          }
+          while (voxelSet.isColumnFull(zStart, z, xEnd + 1, yStart)) {
+            voxelSet.setColumn(zStart, z, xEnd + 1, yStart, false);
+            ++xEnd;
+          }
+          while (voxelSet.isRectangleFull(xStart, xEnd + 1, zStart, z, yStart - 1)) {
+            for (int xSweep = xStart; xSweep <= xEnd; xSweep++)
+              voxelSet.setColumn(zStart, z, xSweep, yStart - 1, false);
+            --yStart;
+          }
+          while (voxelSet.isRectangleFull(xStart, xEnd + 1, zStart, z, yEnd + 1)) {
+            for (int xSweep = xStart; xSweep <= xEnd; xSweep++)
+              voxelSet.setColumn(zStart, z, xSweep, yEnd + 1, false);
+            ++yEnd;
+          }
+          simplifiedShape = VoxelShapes.combine(simplifiedShape,
+              cuboidByIndex(xStart, yStart, zStart, xEnd + 1, yEnd + 1, z), BooleanBiFunction.OR);
+          zStart = -1;
+        }
+      }
+    }
+    return simplifiedShape;
+  }
 
   /**
    * See {net.minecraft.util.shape.VoxelShape.method_1108(Axis, BoundingBox,

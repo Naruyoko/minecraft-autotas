@@ -275,4 +275,16 @@ public class XYZBoundingBox extends XZBoundingBox {
     return this.minX < other.maxX && this.maxX > other.minX && this.minY < other.maxY && this.maxY > other.minY
         && this.minZ < other.maxZ && this.maxZ > other.minZ;
   }
+
+  /**
+   * See {net.minecraft.util.math.BoundingBox.contains(double, double, double)}
+   * 
+   * @param d
+   * @param e
+   * @param f
+   * @return
+   */
+  public boolean contains(double d, double e, double f) {
+    return d >= this.minX && d < this.maxX && e >= this.minY && e < this.maxY && f >= this.minZ && f < this.maxZ;
+  }
 }
